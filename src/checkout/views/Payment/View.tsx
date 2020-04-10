@@ -21,6 +21,7 @@ import {
 import { reviewUrl } from "../../routes";
 import CreditCard from "./Gateways/Braintree/CreditCard";
 import Dummy from "./Gateways/Dummy";
+import Mpesa from "./Gateways/Mpesa";
 import { Stripe } from "./Gateways/Stripe";
 import { TypedPaymentMethodCreateMutation } from "./queries";
 import "./scss/index.scss";
@@ -248,7 +249,14 @@ const View: React.FC<RouteComponentProps<{ token?: string }>> = ({
                             <Dummy {...paymentGatewayProps} />
                           </Option>
                         );
-
+                      
+                      case PROVIDERS.MPESA.label:
+                        return (
+                          <Option label="Lipa na M-PESA" {...optionProps(providerName)}>
+                            <Mpesa {...paymentGatewayProps} />
+                          </Option>
+                        );
+                      
                       case PROVIDERS.STRIPE.label:
                         return (
                           <Option label="Stripe" {...optionProps(providerName)}>
