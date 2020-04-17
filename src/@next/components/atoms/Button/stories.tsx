@@ -5,7 +5,6 @@ import React from "react";
 import { Button } from ".";
 
 storiesOf("@components/atoms/Button", module)
-  .addParameters({ component: Button })
   .add("Primary", () => (
     <Button fullWidth={boolean("FullWidth", false)}>Primary Button</Button>
   ))

@@ -2,8 +2,7 @@ import gql from "graphql-tag";
 
 import {
   basicProductFragment,
-  productVariantFragment,
-  selectedAttributeFragment,
+  productVariantFragment
 } from "../fragments/products";
 
 export const productPricingFragment = gql`
@@ -32,7 +31,6 @@ export const productPricingFragment = gql`
 
 export const productListDetails = gql`
   ${basicProductFragment}
-  ${productPricingFragment}
   query ProductList(
     $id: ID!
     $attributes: [AttributeInput]
@@ -56,7 +54,20 @@ export const productListDetails = gql`
       edges {
         node {
           ...BasicProductFields
-          ...ProductPricingField
+          price {
+            amount
+            currency
+            localized
+          }
+          pricing {
+            priceRange {
+              start {
+                gross {
+                  localized
+                }
+              }
+            }
+          }
           category {
             id
             name
@@ -75,7 +86,6 @@ export const productListDetails = gql`
 
 export const productDetails = gql`
   ${basicProductFragment}
-  ${selectedAttributeFragment}
   ${productVariantFragment}
   ${productPricingFragment}
   query ProductDetails($id: ID!) {
@@ -86,7 +96,7 @@ export const productDetails = gql`
       category {
         id
         name
-        products(first: 3) {
+        products(first: 4) {
           edges {
             node {
               ...BasicProductFields
@@ -103,32 +113,13 @@ export const productDetails = gql`
         id
         url
       }
-      attributes {
-        ...SelectedAttributeFields
-      }
       variants {
         ...ProductVariantFields
       }
       seoDescription
       seoTitle
-      isAvailable
-    }
-  }
-`;
-
-export const variantsProducts = gql`
-  query VariantsProducts($ids: [ID]) {
-    productVariants(ids: $ids, first: 100) {
-      edges {
-        node {
-          id
-          product {
-            id
-            productType {
-              isShippingRequired
-            }
-          }
-        }
+      availability {
+        available
       }
     }
   }

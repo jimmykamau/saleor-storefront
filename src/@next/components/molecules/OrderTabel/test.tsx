@@ -37,8 +37,7 @@ const ORDERS = [
       statusDisplay: "Unfulfilled",
       token: "687f3e43-b198-4c7f-b6e5-75c2c93b3f45",
       total: {
-        gross: { amount: 42.91, currency: "USD" },
-        net: { amount: 42.91, currency: "USD" },
+        gross: { localized: "$42.91" },
       },
     },
   },
@@ -71,8 +70,7 @@ const ORDERS = [
       statusDisplay: "Fulfilled",
       token: "c2deea58-00ad-4838-bb7b-0678fd4f1f38",
       total: {
-        gross: { amount: 29.24, currency: "USD" },
-        net: { amount: 29.24, currency: "USD" },
+        gross: { localized: "$29.24" },
       },
     },
   },
@@ -96,13 +94,13 @@ describe("<OrderTabel />", () => {
 
     expect(wrapper.text()).toContain("77");
     expect(wrapper.text()).toContain("9/4/2019");
+    expect(wrapper.text()).toContain("$42.91");
     expect(wrapper.text()).toContain("Unfulfilled");
-    expect(wrapper.text()).toContain("42.91");
 
     expect(wrapper.text()).toContain("76");
     expect(wrapper.text()).toContain("6/10/2019");
+    expect(wrapper.text()).toContain("$29.24");
     expect(wrapper.text()).toContain("Fulfilled");
-    expect(wrapper.text()).toContain("29.24");
   });
 
   it("should navigate to particular order when clicking on order row", () => {
@@ -114,9 +112,7 @@ describe("<OrderTabel />", () => {
       .at(1)
       .simulate("click");
 
-    expect(historySpy).toHaveBeenCalledWith(
-      `/order-history/${ORDERS[0].node.token}`
-    );
+    expect(historySpy).toHaveBeenCalledWith(`/order/${ORDERS[0].node.token}`);
   });
 
   it("should navigate to product page when clicking on product thumbnail", () => {

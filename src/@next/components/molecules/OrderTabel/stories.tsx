@@ -32,8 +32,7 @@ const ORDERS = [
       statusDisplay: "Unfulfilled",
       token: "687f3e43-b198-4c7f-b6e5-75c2c93b3f45",
       total: {
-        gross: { amount: 42.91, currency: "USD" },
-        net: { amount: 42.91, currency: "USD" },
+        gross: { localized: "$42.91" },
       },
     },
   },
@@ -66,18 +65,12 @@ const ORDERS = [
       statusDisplay: "Fulfilled",
       token: "c2deea58-00ad-4838-bb7b-0678fd4f1f38",
       total: {
-        gross: { amount: 29.24, currency: "USD" },
-        net: { amount: 29.24, currency: "USD" },
+        gross: { localized: "$29.24" },
       },
     },
   },
 ];
 
-storiesOf("@components/molecules/OrderTabel", module)
-  .addParameters({ component: OrderTabel })
-  .add("default", () => {
-    // this is added to fix issue when running on machines with different locales
-    // so one one machine price is displayed as $42.24 and on others as US$ 42.24 etc
-    Number.prototype.toLocaleString = () => "";
-    return <OrderTabel history={history} orders={ORDERS} />;
-  });
+storiesOf("@components/molecules/OrderTabel", module).add("default", () => (
+  <OrderTabel history={history} orders={ORDERS} />
+));

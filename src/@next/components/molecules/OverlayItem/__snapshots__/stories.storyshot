@@ -32,7 +32,6 @@ exports[`Storyshots @components/molecules/OverlayItem default 1`] = `
   align-items: center;
   padding: 1.1rem 1.875rem;
   border-bottom: 1px solid #f1f5f5;
-  color: unset;
 }
 
 .c1:hover {
@@ -46,7 +45,6 @@ exports[`Storyshots @components/molecules/OverlayItem default 1`] = `
 >
   <div
     className="c1"
-    disabled={false}
     selected={false}
   >
     Item
@@ -90,7 +88,6 @@ exports[`Storyshots @components/molecules/OverlayItem selected 1`] = `
   padding: 1.1rem 1.875rem;
   border-bottom: 1px solid #f1f5f5;
   font-weight: 600;
-  color: unset;
 }
 
 .c1:hover {
@@ -104,7 +101,6 @@ exports[`Storyshots @components/molecules/OverlayItem selected 1`] = `
 >
   <div
     className="c1"
-    disabled={false}
     selected={true}
   >
     Item

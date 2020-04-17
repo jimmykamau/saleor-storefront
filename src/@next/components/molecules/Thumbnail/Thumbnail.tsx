@@ -11,18 +11,15 @@ export const Thumbnail: React.FC<IProps> = ({
   children,
   ...props
 }: IProps) => {
-  const { thumbnail, thumbnail2x } = source;
-
-  if (!thumbnail && !thumbnail2x) {
+  if (!source.thumbnail && !source.thumbnail2x) {
     return <PlaceholderImage />;
   }
-
   return (
     <CachedImage
       {...props}
-      url={maybe(() => thumbnail!.url)}
-      url2x={maybe(() => thumbnail2x!.url)}
-      alt={maybe(() => (thumbnail!.alt ? thumbnail!.alt : ""), "")}
+      url={maybe(() => source.thumbnail.url)}
+      url2x={maybe(() => source.thumbnail2x.url)}
+      alt={maybe(() => source.thumbnail.alt, "")}
     >
       {children}
     </CachedImage>

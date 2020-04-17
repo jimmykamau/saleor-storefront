@@ -32,8 +32,6 @@ const Container = () => {
   );
 };
 
-storiesOf("@components/atoms/Select", module)
-  .addParameters({ component: Select })
-  .add("sample select", () => {
-    return <Container />;
-  });
+storiesOf("@components/atoms/Select", module).add("sample select", () => {
+  return <Container />;
+});

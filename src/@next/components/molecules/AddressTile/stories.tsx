@@ -37,7 +37,6 @@ const DEFAULT_PROPS = {
 };
 
 storiesOf("@components/molecules/AddressTile", module)
-  .addParameters({ component: AddressTile })
   .add("default", () => (
     <Container>
       <AddressTile {...DEFAULT_PROPS} />

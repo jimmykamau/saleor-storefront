@@ -1,19 +1,12 @@
 import { generatePageUrl } from "./utils";
 
 export const BASE_URL = "/";
-export const PRODUCTS_PER_PAGE = 6;
+export const PRODUCTS_PER_PAGE = 8;
 export const SUPPORT_EMAIL = "support@example.com";
 export const PROVIDERS = {
-  BRAINTREE: {
-    label: "Braintree",
-  },
-  DUMMY: {
-    label: "Dummy",
-  },
-  STRIPE: {
-    href: "https://js.stripe.com/v3/",
-    label: "Stripe",
-  },
+  BRAINTREE: "Braintree",
+  DUMMY: "Dummy",
+  STRIPE: "Stripe",
 };
 export const STATIC_PAGES = [
   {
@@ -45,10 +38,10 @@ export const SOCIAL_MEDIA = [
 ];
 export const META_DEFAULTS = {
   custom: [],
-  description:
-    "Open-source PWA storefront built with Saleor's e-commerce GraphQL API. Written with React and TypeScript.",
+  description: "PWA Storefront",
+
   image: `${window.location.origin}${require("../images/logo.svg")}`,
-  title: "Demo PWA Storefront – Saleor Commerce",
+  title: "Saleor",
   type: "website",
   url: window.location.origin,
 };

@@ -9,19 +9,15 @@ import ProductRow, { EditableProductRowProps, LineI } from "./ProductRow";
 
 interface TableProps extends EditableProductRowProps {
   lines: LineI[];
-  subtotal: React.ReactNode;
-  deliveryCost?: React.ReactNode;
-  totalCost?: React.ReactNode;
-  discount?: React.ReactNode;
-  discountName?: string;
+  subtotal: string;
+  deliveryCost?: string;
+  totalCost?: string;
 }
 
 const Table: React.FC<TableProps> = ({
   subtotal,
   deliveryCost,
   totalCost,
-  discount,
-  discountName,
   lines,
   ...rowProps
 }) => (
@@ -53,13 +49,6 @@ const Table: React.FC<TableProps> = ({
             heading="Subtotal"
             cost={subtotal}
           />
-          {discount && (
-            <CostRow
-              mediumScreen={mediumScreen}
-              heading={`Discount: ${discountName}`}
-              cost={discount}
-            />
-          )}
           {deliveryCost && (
             <CostRow
               mediumScreen={mediumScreen}

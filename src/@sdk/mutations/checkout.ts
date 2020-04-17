@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import {
   checkoutFragment,
   checkoutLineFragment,
-  checkoutPriceFragment,
+  checkoutPriceFragment
 } from "../fragments/checkout";
 
 export const updateCheckoutLineQuery = gql`
@@ -16,13 +16,9 @@ export const updateCheckoutLineQuery = gql`
         lines {
           ...CheckoutLine
         }
-        totalPrice {
-          ...Price
-        }
         subtotalPrice {
           ...Price
         }
-        isShippingRequired
       }
       errors {
         field
@@ -94,46 +90,6 @@ export const updateCheckoutShippingAddressMutation = gql`
       errors {
         field
         message
-      }
-    }
-  }
-`;
-
-export const addCheckoutPromoCode = gql`
-  ${checkoutFragment}
-  mutation AddCheckoutPromoCode($checkoutId: ID!, $promoCode: String!) {
-    checkoutAddPromoCode(checkoutId: $checkoutId, promoCode: $promoCode) {
-      checkout {
-        ...Checkout
-      }
-      errors {
-        field
-        message
-      }
-      checkoutErrors {
-        field
-        message
-        code
-      }
-    }
-  }
-`;
-
-export const removeCheckoutPromoCode = gql`
-  ${checkoutFragment}
-  mutation RemoveCheckoutPromoCode($checkoutId: ID!, $promoCode: String!) {
-    checkoutRemovePromoCode(checkoutId: $checkoutId, promoCode: $promoCode) {
-      checkout {
-        ...Checkout
-      }
-      errors {
-        field
-        message
-      }
-      checkoutErrors {
-        field
-        message
-        code
       }
     }
   }

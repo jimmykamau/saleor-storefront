@@ -3,7 +3,11 @@ import * as React from "react";
 import { useLocalStorage } from "@hooks";
 import { useAuth, useCheckoutDetails, useUserCheckout } from "@sdk/react";
 
-import { CheckoutContext, CheckoutContextInterface } from "./context";
+import {
+  CheckoutContext,
+  CheckoutContextInterface,
+  CheckoutStep
+} from "./context";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -50,6 +54,32 @@ export const CheckoutProvider: React.FC<ProviderProps> = ({
     }
   }, [user.data]);
 
+  const getCurrentStep = () => {
+    if (!state.checkout) {
+      return CheckoutStep.ShippingAddress;
+    }
+
+    const isShippingOptionStep =
+      state.checkout.availableShippingMethods.length &&
+      !!state.checkout.shippingAddress;
+    const isBillingStep =
+      isShippingOptionStep && !!state.checkout.shippingMethod;
+    const isPaymentStep = isBillingStep && !!state.checkout.billingAddress;
+    const isReviewStep =
+      isPaymentStep && !!(state.cardData || state.dummyStatus);
+
+    if (isReviewStep) {
+      return CheckoutStep.Review;
+    } else if (isPaymentStep) {
+      return CheckoutStep.Payment;
+    } else if (isBillingStep) {
+      return CheckoutStep.BillingAddress;
+    } else if (isShippingOptionStep) {
+      return CheckoutStep.ShippingOption;
+    }
+    return CheckoutStep.ShippingAddress;
+  };
+
   const update = (checkoutData: CheckoutContextInterface) => {
     setState(prevState => ({
       ...prevState,
@@ -74,6 +104,7 @@ export const CheckoutProvider: React.FC<ProviderProps> = ({
   const getContext = () => ({
     ...state,
     clear,
+    step: getCurrentStep(),
     update,
   });
 

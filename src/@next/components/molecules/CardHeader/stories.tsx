@@ -18,7 +18,6 @@ const renderHeader = (props: IProps) => (
 );
 
 storiesOf("@components/molecules/CardHeader", module)
-  .addParameters({ component: CardHeader })
   .add("default", () => <CardHeader {...DEFAULT_PROPS} />)
   .add("with divider", () => {
     const PROPS = { ...DEFAULT_PROPS, divider: true };

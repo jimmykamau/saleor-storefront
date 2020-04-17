@@ -38,6 +38,10 @@ export interface Category_products_edges_node_price {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface Category_products_edges_node_category {
