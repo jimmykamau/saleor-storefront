@@ -36,7 +36,6 @@ export interface IGuestAddressProps {
   proceedToNextStep: (formData: FormAddressType) => void;
   shippingAsBilling?: boolean;
   type?: CheckoutFormType;
-  noShipping?: boolean;
 }
 
 export interface UserAddressSelectorProps {
@@ -74,7 +73,6 @@ export interface IAddressPickerProps {
   isVisibleModalForm: boolean;
   loading: boolean;
   selectedAddress?: FormAddressType;
-  emailRequired?: boolean;
   onAddressSelect: (address: FormAddressType) => void;
   handleAddressAdd: (address: FormAddressType) => void;
   hideAddNewModalForm: () => void;

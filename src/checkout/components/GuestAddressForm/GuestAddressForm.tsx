@@ -69,7 +69,6 @@ const GuestAddressForm: React.FC<IGuestAddressProps> = ({
   shippingAsBilling,
   shop,
   type = "shipping",
-  noShipping,
 }) => (
   <ShippingAddressForm
     type={type as CheckoutFormType}
@@ -84,7 +83,6 @@ const GuestAddressForm: React.FC<IGuestAddressProps> = ({
     loading={loading}
     shippingAsBilling={shippingAsBilling}
     onSubmit={proceedToNextStep}
-    noShipping={noShipping}
   />
 );
 

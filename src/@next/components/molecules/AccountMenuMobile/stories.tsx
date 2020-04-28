@@ -21,7 +21,6 @@ const active = "/address-book/";
 const DEFAULT_PROPS = { ...{ links, active } };
 
 storiesOf("@components/molecules/AccountMenuMobile", module)
-  .addParameters({ component: AccountMenuMobile })
   .addDecorator(story => (
     <MemoryRouter initialEntries={["/"]}>{story()}</MemoryRouter>
   ))

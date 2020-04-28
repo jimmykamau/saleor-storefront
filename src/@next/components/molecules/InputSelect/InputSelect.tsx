@@ -21,7 +21,6 @@ export const InputSelect: React.FC<IProps> = ({ label, ...props }: IProps) => {
         outlineStyle: "solid",
         outlineWidth: "1px",
       },
-      background: "none",
       border: state.menuIsOpen
         ? `1px solid ${secondaryColor}`
         : `1px solid ${borderColor}`,
@@ -39,7 +38,6 @@ export const InputSelect: React.FC<IProps> = ({ label, ...props }: IProps) => {
       };
     },
   };
-
   const customComponents = {
     Control: (props: any) => {
       const customTheme = React.useContext(ThemeContext);
@@ -48,7 +46,7 @@ export const InputSelect: React.FC<IProps> = ({ label, ...props }: IProps) => {
           <components.Control {...{ customTheme, ...props }} />
           {
             <InputLabel
-              labelBackground={customTheme.colors.light}
+              labelBackground="#FFF"
               active={props.selectProps.menuIsOpen || props.hasValue}
             >
               {label}
@@ -58,26 +56,14 @@ export const InputSelect: React.FC<IProps> = ({ label, ...props }: IProps) => {
       );
     },
     IndicatorSeparator: () => null,
-    IndicatorsContainer: ({ selectProps, hasValue, clearValue }: any) => {
-      const showClearIndicator =
-        selectProps.isClearable ||
-        (selectProps.isMulti && selectProps.isClearable === undefined);
-
-      if (showClearIndicator && hasValue) {
-        return (
-          <S.ClearIndicator onClick={clearValue}>
-            <Icon name="select_x" size={10} />
-          </S.ClearIndicator>
-        );
-      } else {
+    IndicatorsContainer: ({ selectProps }: any) => {
+      return (
         // Boolean to string conversion done due to
         // https://github.com/styled-components/styled-components/issues/1198
-        return (
-          <S.DropdownIndicator rotate={String(selectProps.menuIsOpen)}>
-            <Icon name="select_arrow" size={10} />
-          </S.DropdownIndicator>
-        );
-      }
+        <S.Indicator rotate={String(selectProps.menuIsOpen)}>
+          <Icon name="select_arrow" size={10} />
+        </S.Indicator>
+      );
     },
     Option: (props: any) => {
       const customTheme = React.useContext(ThemeContext);

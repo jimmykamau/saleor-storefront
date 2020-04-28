@@ -3,7 +3,7 @@ import { TypedQuery } from "../../../core/queries";
 
 import {
   checkoutAddressFragment,
-  checkoutProductVariantFragment,
+  checkoutProductVariantFragment
 } from "../../../checkout/queries";
 import { OrderById, OrderByIdVariables } from "./types/OrderById";
 import { OrderByToken, OrderByTokenVariables } from "./types/OrderByToken";
@@ -13,10 +13,12 @@ const orderPriceFragment = gql`
     gross {
       amount
       currency
+      localized
     }
     net {
       amount
       currency
+      localized
     }
   }
 `;
@@ -43,8 +45,10 @@ const orderDetailFragment = gql`
         ...ProductVariant
       }
       unitPrice {
-        ...OrderPrice
         currency
+        gross {
+          amount
+        }
       }
     }
     subtotal {

@@ -18,6 +18,7 @@ export { default as PasswordResetForm } from "./PasswordResetForm";
 export { default as PriceRangeFilter } from "./PriceRangeFilter";
 export { default as ProductDescription } from "./ProductDescription";
 export { default as ProductListItem } from "./ProductListItem";
+export { default as ProductsList } from "./ProductsList";
 export { default as SelectField } from "./SelectField";
 export { default as SocialMediaIcon } from "./SocialMediaIcon";
 export { default as TextField } from "./TextField";
@@ -31,7 +32,7 @@ export { Filters, ProductFilters } from "./ProductFilters";
 export {
   default as Breadcrumbs,
   Breadcrumb,
-  extractBreadcrumbs,
+  extractBreadcrumbs
 } from "./Breadcrumbs";
 export { DebounceChange, DebouncedTextField } from "./Debounce";
 export { Footer } from "./Footer";
@@ -42,7 +43,7 @@ export {
   MetaConsumer,
   MetaProvider,
   MetaContextInterface,
-  MetaWrapper,
+  MetaWrapper
 } from "./Meta";
 export { OverlayManager } from "./OverlayManager";
 export {
@@ -53,7 +54,7 @@ export {
   OverlayProvider,
   OverlayTheme,
   OverlayType,
-  ShowOverlayType,
+  ShowOverlayType
 } from "./Overlay";
 export { default as Select } from "./Select";
 export { default as Modal } from "./Modal";

@@ -116,9 +116,9 @@ const useMutation = <
         handleMutationStart();
 
         const mutationId = generateNewMutationId();
-        const apolloVariables = { ...(baseVariables as object), ...(variables as object) };
+        const apolloVariables = { ...baseVariables, ...variables };
 
-        const apolloOptions = { ...(baseOptions as object), ...(options as object) };
+        const apolloOptions = { ...baseOptions, ...options };
 
         (saleor[mutation] as (variables: any, options: any) => Promise<any>)(
           apolloVariables,

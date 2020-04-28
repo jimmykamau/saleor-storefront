@@ -7,6 +7,10 @@
 
 export interface Price_gross {
   __typename: "Money";
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface Price {

@@ -1,29 +1,12 @@
 import React from "react";
 
-import { IconButton } from "@components/atoms";
-import { AttributeValuesChecklist } from "@components/molecules";
-import { useHandlerWhenClickedOutside } from "@hooks";
-
 import { Overlay } from "../";
-import { IFilters, ISingleFilterAttribute } from "../../../types";
+
+import { IconButton } from "@components/atoms";
+import { FilterAttribute } from "@components/molecules";
+import { useHandlerWhenClickedOutside } from "../../../hooks";
 import * as S from "./styles";
 import { IProps } from "./types";
-
-const checkIfAttributeIsChecked = (
-  filters: IFilters,
-  value: ISingleFilterAttribute,
-  slug: string
-) => {
-  if (filters!.attributes && filters.attributes.hasOwnProperty(slug)) {
-    if (filters.attributes[slug].find(filter => filter === value.slug)) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-};
 
 export const FilterSidebar: React.FC<IProps> = ({
   hide,
@@ -31,7 +14,7 @@ export const FilterSidebar: React.FC<IProps> = ({
   show,
   attributes,
   target,
-  onAttributeFiltersChange,
+  ...props
 }: IProps) => {
   const { setElementRef } = useHandlerWhenClickedOutside(() => {
     hide();
@@ -45,23 +28,19 @@ export const FilterSidebar: React.FC<IProps> = ({
       transparent
       target={target}
     >
-      <S.Wrapper ref={setElementRef()} data-cy="filter-sidebar">
+      <S.Wrapper ref={setElementRef()}>
         <S.Header>
           <span>FILTERS</span>
           <IconButton onClick={hide} name="x" size={18} color="000" />
         </S.Header>
-        {attributes.map(({ id, name, slug, values }) => {
+        {attributes.map(attribute => {
           return (
-            <AttributeValuesChecklist
-              key={id}
-              title={name}
-              name={slug}
-              values={values.map(value => ({
-                ...value,
-                selected: checkIfAttributeIsChecked(filters, value, slug),
-              }))}
-              valuesShowLimit
-              onValueClick={value => onAttributeFiltersChange(slug, value.slug)}
+            <FilterAttribute
+              {...{
+                attribute,
+                filters,
+                ...props,
+              }}
             />
           );
         })}

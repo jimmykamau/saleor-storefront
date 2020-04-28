@@ -47,7 +47,6 @@ const renderModalForm = ({
   isVisibleModalForm,
   loading,
   type,
-  emailRequired,
 }: IAddressPickerProps) => (
   <Modal
     show={isVisibleModalForm}
@@ -63,7 +62,6 @@ const renderModalForm = ({
       loading={loading}
       errors={errors}
       onSubmit={handleAddressAdd}
-      emailRequired={emailRequired}
     />
   </Modal>
 );

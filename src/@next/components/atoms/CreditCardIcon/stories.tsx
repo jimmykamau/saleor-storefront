@@ -4,7 +4,6 @@ import React from "react";
 import { CreditCardIcon } from ".";
 
 storiesOf("@components/atoms/CreditCardIcon", module)
-  .addParameters({ component: CreditCardIcon })
   .add("VISA", () => <CreditCardIcon creditCardProvider="visa" />)
   .add("MASTERCARD", () => <CreditCardIcon creditCardProvider="mastercard" />)
   .add("DISCOVER", () => <CreditCardIcon creditCardProvider="discover" />)

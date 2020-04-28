@@ -4,6 +4,7 @@ import classNames from "classnames";
 import * as React from "react";
 import Media from "react-media";
 
+import { RichTextContent } from "@components/atoms";
 import { CachedImage, Thumbnail } from "@components/molecules";
 
 import { Breadcrumbs, ProductDescription } from "../../components";
@@ -13,29 +14,11 @@ import GalleryCarousel from "./GalleryCarousel";
 import OtherProducts from "./Other";
 import { ProductDetails_product } from "./types/ProductDetails";
 
-import { ProductDescription as NewProductDescription } from "../../@next/components/molecules";
-
-import { ProductGallery } from "../../@next/components/organisms/";
-
 import { structuredData } from "../../core/SEO/Product/structuredData";
 
-class Page extends React.PureComponent<
-  { product: ProductDetails_product },
-  { variantId: string }
-> {
+class Page extends React.PureComponent<{ product: ProductDetails_product }> {
   fixedElement: React.RefObject<HTMLDivElement> = React.createRef();
   productGallery: React.RefObject<HTMLDivElement> = React.createRef();
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      variantId: "",
-    };
-  }
-
-  setVariantId = (id: string) => {
-    this.setState({ variantId: id });
-  };
 
   get showCarousel() {
     return this.props.product.images.length > 1;
@@ -52,50 +35,56 @@ class Page extends React.PureComponent<
     },
   ];
 
-  getImages = () => {
-    const { product } = this.props;
-    if (product.variants && this.state.variantId) {
-      const variant = product.variants
-        .filter(variant => variant.id === this.state.variantId)
-        .pop();
-      if (variant.images.length > 0) {
-        return variant.images;
-      } else {
-        return product.images;
-      }
-    } else {
-      return product.images;
+  componentDidMount() {
+    if (this.showCarousel) {
+      window.addEventListener("scroll", this.handleScroll, {
+        passive: true,
+      });
     }
-  };
+  }
 
-  renderImages = product => {
-    const images = this.getImages();
-    if (images && images.length) {
-      return images.map(image => (
-        <a href={image.url} target="_blank">
-          <CachedImage url={image.url} key={image.id}>
-            <Thumbnail source={product} />
-          </CachedImage>
-        </a>
-      ));
+  componentWillUnmount() {
+    if (this.showCarousel) {
+      window.removeEventListener("scroll", this.handleScroll);
     }
-    return <CachedImage />;
+  }
+
+  handleScroll = () => {
+    const productGallery = this.productGallery.current;
+    const fixedElement = this.fixedElement.current;
+
+    if (productGallery && fixedElement) {
+      const containerPostion =
+        window.innerHeight - productGallery.getBoundingClientRect().bottom;
+      const fixedPosition =
+        window.innerHeight - fixedElement.getBoundingClientRect().bottom;
+      const fixedToTop = Math.floor(fixedElement.getBoundingClientRect().top);
+      const galleryToTop = Math.floor(
+        this.productGallery.current.getBoundingClientRect().top + window.scrollY
+      );
+
+      if (containerPostion >= fixedPosition && fixedToTop <= galleryToTop) {
+        fixedElement.classList.remove("product-page__product__info--fixed");
+        fixedElement.classList.add("product-page__product__info--absolute");
+      } else {
+        fixedElement.classList.remove("product-page__product__info--absolute");
+        fixedElement.classList.add("product-page__product__info--fixed");
+      }
+    }
   };
 
   render() {
     const { product } = this.props;
-
     const cartContextConsumer = (
       <CartContext.Consumer>
         {cart => (
           <ProductDescription
-            productId={product.id}
             name={product.name}
             productVariants={product.variants}
-            pricing={product.pricing}
             addToCart={cart.add}
-            setVariantId={this.setVariantId}
-          />
+          >
+            <RichTextContent descriptionJson={product.descriptionJson} />
+          </ProductDescription>
         )}
       </CartContext.Consumer>
     );
@@ -116,7 +105,7 @@ class Page extends React.PureComponent<
               {matches =>
                 matches ? (
                   <>
-                    <GalleryCarousel images={this.getImages()} />
+                    <GalleryCarousel images={product.images} />
                     <div className="product-page__product__info">
                       {cartContextConsumer}
                     </div>
@@ -127,13 +116,19 @@ class Page extends React.PureComponent<
                       className="product-page__product__gallery"
                       ref={this.productGallery}
                     >
-                      <ProductGallery images={this.getImages()} />
+                      {product.images.map((image, index) => (
+                        <CachedImage url={image.url} key={image.id}>
+                          <Thumbnail source={product} />
+                        </CachedImage>
+                      ))}
                     </div>
                     <div className="product-page__product__info">
                       <div
-                        className={classNames(
-                          "product-page__product__info--fixed"
-                        )}
+                        className={classNames({
+                          ["product-page__product__info--fixed"]: this
+                            .showCarousel,
+                        })}
+                        ref={this.fixedElement}
                       >
                         {cartContextConsumer}
                       </div>
@@ -142,14 +137,6 @@ class Page extends React.PureComponent<
                 )
               }
             </Media>
-          </div>
-        </div>
-        <div className="container">
-          <div className="product-page__product__description">
-            <NewProductDescription
-              descriptionJson={product.descriptionJson}
-              attributes={product.attributes}
-            />
           </div>
         </div>
         <OtherProducts products={product.category.products.edges} />

@@ -37,19 +37,13 @@ export const extractCartLines = (
       return {
         ...node,
         quantity,
-        totalPrice: {
-          ...node.pricing.price,
-          currency: node.pricing.price.gross.currency,
-          gross: {
+        totalPrice: priceToString(
+          {
             amount: quantity * node.pricing.price.gross.amount,
-            ...node.pricing.price.gross,
+            currency: node.pricing.price.gross.currency,
           },
-          locale,
-          net: {
-            amount: quantity * node.pricing.price.net.amount,
-            ...node.pricing.price.net,
-          },
-        },
+          locale
+        ),
       };
     })
     .filter(line => line)
@@ -59,18 +53,7 @@ export const extractCheckoutLines = (lines: Checkout_lines[]): LineI[] => {
   return lines
     .map(line => ({
       quantity: line.quantity,
-      totalPrice: {
-        ...line.totalPrice,
-        currency: line.totalPrice.gross.currency,
-        gross: {
-          amount: line.quantity * line.totalPrice.gross.amount,
-          ...line.totalPrice.gross,
-        },
-        net: {
-          amount: line.quantity * line.totalPrice.net.amount,
-          ...line.totalPrice.net,
-        },
-      },
+      totalPrice: line.totalPrice.gross.localized,
       ...line.variant,
     }))
     .sort((a, b) => b.id.toLowerCase().localeCompare(a.id.toLowerCase()));

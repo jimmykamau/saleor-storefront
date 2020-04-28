@@ -1,37 +1,35 @@
-import { History } from "history";
 import * as React from "react";
-import { generatePath } from "react-router";
 import ReactSVG from "react-svg";
 
 import { AddressSummary } from "../../../components";
-import { CardData } from "../../types/CardData";
+import { CardData } from "../../context";
 import { Checkout } from "../../types/Checkout";
 
 import copyImg from "../../../images/copy.svg";
-import {
-  billingUrl,
-  paymentUrl,
-  shippingAddressUrl,
-  shippingOptionsUrl,
-} from "../../routes";
 
 class Summary extends React.PureComponent<{
   checkout: Checkout;
   cardData: CardData;
   dummyStatus: string;
-  history: History;
-  token: string;
 }> {
-  render() {
-    const { checkout, cardData, dummyStatus, history, token } = this.props;
+  shippingAddressRef: React.RefObject<HTMLParagraphElement> = React.createRef();
+  billingAddressRef: React.RefObject<HTMLParagraphElement> = React.createRef();
+  shippingMethodRef: React.RefObject<HTMLParagraphElement> = React.createRef();
+  paymentMethodRef: React.RefObject<HTMLParagraphElement> = React.createRef();
 
-    const handleEdit = (editUrl: string) => {
-      history.push(
-        generatePath(editUrl, {
-          token,
-        })
-      );
-    };
+  copyHandler = (ref: React.RefObject<HTMLParagraphElement>) => () => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+
+    range.selectNodeContents(ref.current);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand("copy");
+    selection.removeAllRanges();
+  };
+
+  render() {
+    const { checkout, cardData, dummyStatus } = this.props;
 
     return (
       <div className="checkout-review__content__summary">
@@ -41,12 +39,13 @@ class Summary extends React.PureComponent<{
             <ReactSVG
               className="checkout-review__summary-copy"
               path={copyImg}
-              onClick={() => handleEdit(shippingAddressUrl)}
+              onClick={this.copyHandler(this.shippingAddressRef)}
             />
           </h4>
           <AddressSummary
-            address={checkout.isShippingRequired && checkout.shippingAddress}
+            address={checkout.shippingAddress}
             email={checkout.email}
+            paragraphRef={this.shippingAddressRef}
           />
         </div>
         <div>
@@ -54,35 +53,36 @@ class Summary extends React.PureComponent<{
             Billing address
             <ReactSVG
               className="checkout-review__summary-copy"
-              onClick={() => handleEdit(billingUrl)}
+              onClick={this.copyHandler(this.billingAddressRef)}
               path={copyImg}
             />
           </h4>
-          <AddressSummary address={checkout.billingAddress} />
+          <AddressSummary
+            address={checkout.billingAddress}
+            paragraphRef={this.billingAddressRef}
+          />
         </div>
-        {checkout.isShippingRequired && (
-          <div>
-            <h4>
-              Shipping method
-              <ReactSVG
-                className="checkout-review__summary-copy"
-                onClick={() => handleEdit(shippingOptionsUrl)}
-                path={copyImg}
-              />
-            </h4>
-            <p>{checkout.shippingMethod.name}</p>
-          </div>
-        )}
+        <div>
+          <h4>
+            Shipping method
+            <ReactSVG
+              className="checkout-review__summary-copy"
+              onClick={this.copyHandler(this.shippingMethodRef)}
+              path={copyImg}
+            />
+          </h4>
+          <p ref={this.shippingMethodRef}>{checkout.shippingMethod.name}</p>
+        </div>
         <div>
           <h4>
             Payment method
             <ReactSVG
               className="checkout-review__summary-copy"
-              onClick={() => handleEdit(paymentUrl)}
+              onClick={this.copyHandler(this.paymentMethodRef)}
               path={copyImg}
             />
           </h4>
-          <p>
+          <p ref={this.paymentMethodRef}>
             {!!cardData
               ? `Ending in ${cardData.lastDigits}`
               : `Lipa na M-PESA: ${dummyStatus}`}

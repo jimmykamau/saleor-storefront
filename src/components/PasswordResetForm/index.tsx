@@ -6,8 +6,6 @@ import { Button, Form, TextField } from "..";
 import { maybe } from "../../core/utils";
 import { TypedPasswordResetMutation } from "./queries";
 
-import { passwordResetUrl } from "../../app/routes";
-
 const PasswordResetForm: React.FC = () => (
   <div className="password-reset-form">
     <p>
@@ -18,15 +16,10 @@ const PasswordResetForm: React.FC = () => (
       {(passwordReset, { loading, data }) => {
         return (
           <Form
-            errors={maybe(() => data.requestPasswordReset.errors, [])}
+            errors={maybe(() => data.customerPasswordReset.errors, [])}
             onSubmit={(event, { email }) => {
               event.preventDefault();
-              passwordReset({
-                variables: {
-                  email,
-                  redirectUrl: `${window.location.origin}${passwordResetUrl}`,
-                },
-              });
+              passwordReset({ variables: { email } });
             }}
           >
             <TextField
@@ -37,7 +30,7 @@ const PasswordResetForm: React.FC = () => (
               required
             />
             <div className="password-reset-form__button">
-              <Button type="submit" {...(loading && { disabled: true })}>
+              <Button type="submit" {...loading && { disabled: true }}>
                 {loading ? "Loading" : "Reset password"}
               </Button>
             </div>

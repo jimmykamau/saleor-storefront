@@ -70,9 +70,7 @@ export const convertToAttributeScalar = (
   attributes: AttributeDict | IFilterAttributes
 ) =>
   Object.entries(attributes)
-    .map(([key, value]) =>
-      value.map((attribute: any) => ({ slug: key, value: attribute }))
-    )
+    .map(([key, value]) => value.map((attribute: any) => `${key}:${attribute}`))
     .reduce((prev, curr) => [...prev, ...curr], []);
 
 interface QueryString {
@@ -132,7 +130,7 @@ export const parseQueryString = (
   location: LocationState
 ): { [key: string]: string } => {
   const query = {
-    ...parseQs((location as any).search.substr(1)),
+    ...parseQs(location.search.substr(1)),
   };
   each(query, (value, key) => {
     if (Array.isArray(value)) {

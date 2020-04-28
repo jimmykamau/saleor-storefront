@@ -2,7 +2,6 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import ReactSVG from "react-svg";
 
-import { TaxedMoney } from "@components/containers";
 import { Thumbnail } from "@components/molecules";
 
 import { generateProductUrl } from "../../../core/utils";
@@ -22,9 +21,7 @@ const ProductList: React.SFC<{
             <Thumbnail source={line.product} />
           </Link>
           <div className="cart__list__item__details">
-            <p>
-              <TaxedMoney taxedMoney={line.pricing.price} />
-            </p>
+            <p>{line.pricing.price.gross.localized}</p>
             <Link to={productUrl}>
               <p>{line.product.name}</p>
             </Link>

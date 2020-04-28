@@ -45,6 +45,11 @@ export interface CreateCheckout_checkoutCreate_checkout_availablePaymentGateways
   config: CreateCheckout_checkoutCreate_checkout_availablePaymentGateways_config[];
 }
 
+export interface CreateCheckout_checkoutCreate_checkout_user {
+  __typename: "User";
+  email: string;
+}
+
 export interface CreateCheckout_checkoutCreate_checkout_totalPrice_gross {
   __typename: "Money";
   /**
@@ -55,6 +60,10 @@ export interface CreateCheckout_checkoutCreate_checkout_totalPrice_gross {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_totalPrice_net {
@@ -67,6 +76,10 @@ export interface CreateCheckout_checkoutCreate_checkout_totalPrice_net {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_totalPrice {
@@ -91,6 +104,10 @@ export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice_gross {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice_net {
@@ -103,6 +120,10 @@ export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice_net {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice {
@@ -209,6 +230,10 @@ export interface CreateCheckout_checkoutCreate_checkout_availableShippingMethods
    * Amount of money.
    */
   amount: number;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_availableShippingMethods {
@@ -231,6 +256,10 @@ export interface CreateCheckout_checkoutCreate_checkout_shippingMethod_price {
    * Amount of money.
    */
   amount: number;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_shippingMethod {
@@ -253,6 +282,10 @@ export interface CreateCheckout_checkoutCreate_checkout_shippingPrice_gross {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_shippingPrice_net {
@@ -265,6 +298,10 @@ export interface CreateCheckout_checkoutCreate_checkout_shippingPrice_net {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_shippingPrice {
@@ -289,6 +326,10 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice_gross {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice_net {
@@ -301,6 +342,10 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice_net {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice {
@@ -325,6 +370,10 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_priceUndiscounted_net {
@@ -337,6 +386,10 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_priceUndiscounted {
@@ -361,6 +414,10 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_price_net {
@@ -373,6 +430,10 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_price {
@@ -472,18 +533,6 @@ export interface CreateCheckout_checkoutCreate_checkout_lines {
   variant: CreateCheckout_checkoutCreate_checkout_lines_variant;
 }
 
-export interface CreateCheckout_checkoutCreate_checkout_discount {
-  __typename: "Money";
-  /**
-   * Currency code.
-   */
-  currency: string;
-  /**
-   * Amount of money.
-   */
-  amount: number;
-}
-
 export interface CreateCheckout_checkoutCreate_checkout {
   __typename: "Checkout";
   /**
@@ -495,6 +544,7 @@ export interface CreateCheckout_checkoutCreate_checkout {
    * The ID of the object.
    */
   id: string;
+  user: CreateCheckout_checkoutCreate_checkout_user | null;
   /**
    * The sum of the the checkout line prices, with all the taxes,shipping costs, and discounts included.
    */
@@ -522,14 +572,6 @@ export interface CreateCheckout_checkoutCreate_checkout {
    * A list of checkout lines, each containing information about an item in the checkout.
    */
   lines: (CreateCheckout_checkoutCreate_checkout_lines | null)[] | null;
-  /**
-   * Returns True, if checkout requires shipping.
-   */
-  isShippingRequired: boolean;
-  discount: CreateCheckout_checkoutCreate_checkout_discount | null;
-  discountName: string | null;
-  translatedDiscountName: string | null;
-  voucherCode: string | null;
 }
 
 export interface CreateCheckout_checkoutCreate {

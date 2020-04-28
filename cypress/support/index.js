@@ -1,2 +1,2 @@
-import "@testing-library/cypress/add-commands";
+import "cypress-testing-library/add-commands";
 import "./commands";

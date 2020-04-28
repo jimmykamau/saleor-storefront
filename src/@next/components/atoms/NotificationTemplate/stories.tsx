@@ -7,7 +7,6 @@ import { NotificationTemplate } from ".";
 const onClick = action("onClick called");
 
 storiesOf("@components/atoms/NotificationTemplate", module)
-  .addParameters({ component: NotificationTemplate })
   .add("default", () => (
     <NotificationTemplate
       close={onClick}

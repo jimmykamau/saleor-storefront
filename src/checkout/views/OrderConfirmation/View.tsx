@@ -3,12 +3,10 @@ import "./scss/index.scss";
 import React from "react";
 import { generatePath, Link, RouteComponentProps } from "react-router-dom";
 
-import { guestOrderDetailsUrl } from "../../../app/routes";
 import { Button, NotFound } from "../../../components";
 import { BASE_URL } from "../../../core/config";
+import { guestOrderDetailsUrl } from "../../../routes";
 import { userOrderDetailsUrl } from "../../../userAccount/routes";
-
-type TState = {token: any, id: number};
 
 const View: React.FC<RouteComponentProps> = ({
   history: {
@@ -19,7 +17,7 @@ const View: React.FC<RouteComponentProps> = ({
     return <NotFound />;
   }
 
-  const { token, id } = state as TState;
+  const { token, id } = state;
   const guest = !id;
   const orderDetailsRef = guest
     ? generatePath(guestOrderDetailsUrl, { token })

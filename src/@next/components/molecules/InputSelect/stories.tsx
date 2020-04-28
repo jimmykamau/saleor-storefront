@@ -38,10 +38,8 @@ const Container = () => {
 };
 
 import { InputSelect } from ".";
-storiesOf("@components/molecules/InputSelect", module)
-  .addParameters({ component: InputSelect })
-  .add("default", () => (
-    <Wrapper>
-      <Container />
-    </Wrapper>
-  ));
+storiesOf("@components/molecules/InputSelect", module).add("default", () => (
+  <Wrapper>
+    <Container />
+  </Wrapper>
+));

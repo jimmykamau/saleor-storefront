@@ -3,7 +3,7 @@
 
 import {
   PaymentChargeStatusEnum,
-  OrderStatus,
+  OrderStatus
 } from "./../../../../../types/globalTypes";
 
 // ====================================================
@@ -49,6 +49,10 @@ export interface Order_orderByToken_lines_variant_price {
    * Currency code.
    */
   currency: string;
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface Order_orderByToken_lines_variant_product_thumbnail {
@@ -115,6 +119,10 @@ export interface Order_orderByToken_lines {
 
 export interface Order_orderByToken_subtotal_gross {
   __typename: "Money";
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface Order_orderByToken_subtotal {
@@ -127,6 +135,10 @@ export interface Order_orderByToken_subtotal {
 
 export interface Order_orderByToken_total_gross {
   __typename: "Money";
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface Order_orderByToken_total {
@@ -139,6 +151,10 @@ export interface Order_orderByToken_total {
 
 export interface Order_orderByToken_shippingPrice_gross {
   __typename: "Money";
+  /**
+   * Money formatted according to the current locale.
+   */
+  localized: string;
 }
 
 export interface Order_orderByToken_shippingPrice {

@@ -2,8 +2,7 @@ import * as React from "react";
 
 import classNames from "classnames";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import { ButtonProps } from "..";
-import { Button } from "../../@next/components/atoms";
+import { Button, ButtonProps } from "..";
 
 interface AddToCartButtonState {
   animate: boolean;
@@ -44,13 +43,11 @@ class AddToCartButton extends React.PureComponent<
 
     return (
       <Button
-        fullWidth={true}
+        {...this.props}
         className={classNames(this.props.className, {
           "product-description__action--fade": animate,
         })}
         onClick={this.handleAnimation}
-        color="primary"
-        disabled={this.props.disabled}
       >
         <ReactCSSTransitionGroup
           transitionName="product-description__action--fade"
