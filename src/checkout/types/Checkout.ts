@@ -153,7 +153,7 @@ export interface Checkout_billingAddress {
    */
   country: Checkout_billingAddress_country;
   countryArea: string;
-  phone: string | null;
+  phone: string;
 }
 
 export interface Checkout_shippingAddress_country {
@@ -186,7 +186,7 @@ export interface Checkout_shippingAddress {
    */
   country: Checkout_shippingAddress_country;
   countryArea: string;
-  phone: string | null;
+  phone: string;
 }
 
 export interface Checkout_availableShippingMethods_price {

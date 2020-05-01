@@ -29,6 +29,7 @@ export const CheckoutProvider: React.FC<ProviderProps> = ({
     checkout: null,
     dummyStatus: null,
     loading: !!token,
+    mpesaData: null,
     shippingAsBilling: false,
     /**
      * Flag to determine, when the user checkout should be fetched from the
@@ -66,7 +67,7 @@ export const CheckoutProvider: React.FC<ProviderProps> = ({
       isShippingOptionStep && !!state.checkout.shippingMethod;
     const isPaymentStep = isBillingStep && !!state.checkout.billingAddress;
     const isReviewStep =
-      isPaymentStep && !!(state.cardData || state.dummyStatus);
+      isPaymentStep && !!(state.cardData || state.dummyStatus || state.mpesaData);
 
     if (isReviewStep) {
       return CheckoutStep.Review;
@@ -96,6 +97,7 @@ export const CheckoutProvider: React.FC<ProviderProps> = ({
       cardData: null,
       checkout: null,
       dummyStatus: null,
+      mpesaData: null,
       shippingAsBilling: false,
     }));
     setCheckoutToken(null);

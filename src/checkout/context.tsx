@@ -21,6 +21,7 @@ export interface CheckoutContextInterface {
   syncUserCheckout?: boolean;
   dummyStatus?: string;
   cardData?: CardData;
+  mpesaData?: string;
   checkout?: Checkout;
   loading?: boolean;
   shippingAsBilling?: boolean;
@@ -35,6 +36,7 @@ export const defaultContext = {
   clear: () => null,
   dummyStatus: null,
   loading: false,
+  mpesaData: null,
   shippingAsBilling: false,
   step: CheckoutStep.ShippingAddress,
   syncUserCheckout: false,

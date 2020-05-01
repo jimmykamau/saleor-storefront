@@ -11,6 +11,7 @@ class Summary extends React.PureComponent<{
   checkout: Checkout;
   cardData: CardData;
   dummyStatus: string;
+  mpesaData: string;
 }> {
   shippingAddressRef: React.RefObject<HTMLParagraphElement> = React.createRef();
   billingAddressRef: React.RefObject<HTMLParagraphElement> = React.createRef();
@@ -29,7 +30,7 @@ class Summary extends React.PureComponent<{
   };
 
   render() {
-    const { checkout, cardData, dummyStatus } = this.props;
+    const { checkout, cardData, dummyStatus, mpesaData } = this.props;
 
     return (
       <div className="checkout-review__content__summary">
@@ -85,7 +86,11 @@ class Summary extends React.PureComponent<{
           <p ref={this.paymentMethodRef}>
             {!!cardData
               ? `Ending in ${cardData.lastDigits}`
-              : `Dummy: ${dummyStatus}`}
+              : (!!mpesaData
+                  ? `Lipa na M-PESA: ${mpesaData}`
+                  : `Dummy: ${dummyStatus}`
+                )
+            }
           </p>
         </div>
       </div>

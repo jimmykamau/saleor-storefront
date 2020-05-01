@@ -16,6 +16,7 @@ import {
 import { reviewUrl } from "../../routes";
 import CreditCard from "./Gateways/Braintree/CreditCard";
 import Dummy from "./Gateways/Dummy";
+import Mpesa from "./Gateways/Mpesa";
 import { Stripe } from "./Gateways/Stripe";
 import { TypedPaymentMethodCreateMutation } from "./queries";
 import { createPayment, createPaymentVariables } from "./types/createPayment";
@@ -178,6 +179,16 @@ class View extends React.Component<
                                     {...optionProps(providerName)}
                                   >
                                     <Dummy {...paymentGatewayProps} />
+                                  </Option>
+                                );
+                              
+                              case PROVIDERS.MPESA:
+                                return (
+                                  <Option
+                                    label="Mpesa"
+                                    {...optionProps(providerName)}
+                                  >
+                                    <Mpesa {...paymentGatewayProps} />
                                   </Option>
                                 );
 

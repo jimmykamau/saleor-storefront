@@ -28,6 +28,7 @@ class Provider extends React.Component<ProviderProps, ProviderState> {
       checkout: null,
       dummyStatus: null,
       loading: !!this.getStoredToken(),
+      mpesaData: null,
       shippingAsBilling: false,
       /**
        * Flag to determine, when the user checkout should be fetched from the
@@ -53,7 +54,7 @@ class Provider extends React.Component<ProviderProps, ProviderState> {
   });
 
   getCurrentStep() {
-    const { checkout, cardData, dummyStatus } = this.state;
+    const { checkout, cardData, dummyStatus, mpesaData } = this.state;
 
     if (!checkout) {
       return CheckoutStep.ShippingAddress;
@@ -63,7 +64,7 @@ class Provider extends React.Component<ProviderProps, ProviderState> {
       checkout.availableShippingMethods.length && !!checkout.shippingAddress;
     const isBillingStep = isShippingOptionStep && !!checkout.shippingMethod;
     const isPaymentStep = isBillingStep && !!checkout.billingAddress;
-    const isReviewStep = isPaymentStep && !!(cardData || dummyStatus);
+    const isReviewStep = isPaymentStep && !!(cardData || dummyStatus || mpesaData);
 
     if (isReviewStep) {
       return CheckoutStep.Review;
@@ -82,6 +83,7 @@ class Provider extends React.Component<ProviderProps, ProviderState> {
       cardData: null,
       checkout: null,
       dummyStatus: null,
+      mpesaData: null,
       shippingAsBilling: false,
       step: CheckoutStep.ShippingAddress,
     });

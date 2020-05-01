@@ -58,6 +58,7 @@ const View: React.FC<RouteComponentProps<{ token?: string }>> = ({
   const {
     cardData,
     dummyStatus,
+    mpesaData,
     checkout,
     clear: clearCheckout,
     step,
@@ -100,6 +101,7 @@ const View: React.FC<RouteComponentProps<{ token?: string }>> = ({
               checkout={checkout}
               cardData={cardData}
               dummyStatus={dummyStatus}
+              mpesaData={mpesaData}
             />
             <div className="checkout-review__content__submit">
               <TypedCompleteCheckoutMutation
