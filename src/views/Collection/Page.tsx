@@ -3,10 +3,11 @@ import "../Category/scss/index.scss";
 import * as React from "react";
 
 import { IFilterAttributes, IFilters } from "@types";
-import { Breadcrumbs, ProductsFeatured, ProductsList } from "../../components";
+import { ProductListHeader } from "../../@next/components/molecules";
+import { ProductList } from "../../@next/components/organisms";
+import { Breadcrumbs, ProductsFeatured } from "../../components";
 import { getDBIdFromGraphqlId, maybe } from "../../core/utils";
 
-import { ProductListHeader } from "../../@next/components/molecules";
 import { FilterSidebar } from "../../@next/components/organisms/FilterSidebar";
 import { Collection_collection, Collection_products } from "./types/Collection";
 
@@ -65,6 +66,27 @@ const Page: React.FC<PageProps> = ({
     },
   ];
 
+  const getAttribute = (attributeSlug: string, valueSlug: string) => {
+    return {
+      attributeSlug,
+      valueName: attributes
+        .find(({ slug }) => attributeSlug === slug)
+        .values.find(({ slug }) => valueSlug === slug).name,
+      valueSlug,
+    };
+  };
+
+  const activeFiltersAttributes =
+    filters &&
+    filters.attributes &&
+    Object.keys(filters.attributes).reduce(
+      (acc, key) =>
+        acc.concat(
+          filters.attributes[key].map(valueSlug => getAttribute(key, valueSlug))
+        ),
+      []
+    );
+
   return (
     <div className="collection">
       <div className="container">
@@ -81,23 +103,22 @@ const Page: React.FC<PageProps> = ({
           openFiltersMenu={() => setShowFilters(true)}
           numberOfProducts={products ? products.totalCount : 0}
           activeFilters={activeFilters}
+          activeFiltersAttributes={activeFiltersAttributes}
           clearFilters={clearFilters}
           sortOptions={sortOptions}
           onChange={onOrder}
+          onCloseFilterAttribute={onAttributeFiltersChange}
         />
+        {canDisplayProducts && (
+          <ProductList
+            products={products.edges.map(edge => edge.node)}
+            canLoadMore={hasNextPage}
+            loading={displayLoader}
+            onLoadMore={onLoadMore}
+          />
+        )}
       </div>
 
-      {canDisplayProducts && (
-        <>
-          <ProductsList
-            displayLoader={displayLoader}
-            hasNextPage={hasNextPage}
-            onLoadMore={onLoadMore}
-            products={products.edges.map(edge => edge.node)}
-            totalCount={products.totalCount}
-          />
-        </>
-      )}
       {!hasProducts && <ProductsFeatured title="You might like" />}
     </div>
   );

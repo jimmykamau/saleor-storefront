@@ -6,35 +6,6 @@
 // GraphQL fragment: Checkout
 // ====================================================
 
-export interface Checkout_availablePaymentGateways_config {
-  __typename: "GatewayConfigLine";
-  /**
-   * Gateway config key.
-   */
-  field: string;
-  /**
-   * Gateway config value for key.
-   */
-  value: string | null;
-}
-
-export interface Checkout_availablePaymentGateways {
-  __typename: "PaymentGateway";
-  /**
-   * Payment gateway name.
-   */
-  name: string;
-  /**
-   * Payment gateway client configuration.
-   */
-  config: Checkout_availablePaymentGateways_config[];
-}
-
-export interface Checkout_user {
-  __typename: "User";
-  email: string;
-}
-
 export interface Checkout_totalPrice_gross {
   __typename: "Money";
   /**
@@ -45,10 +16,6 @@ export interface Checkout_totalPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_totalPrice_net {
@@ -61,10 +28,6 @@ export interface Checkout_totalPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_totalPrice {
@@ -89,10 +52,6 @@ export interface Checkout_subtotalPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_subtotalPrice_net {
@@ -105,10 +64,6 @@ export interface Checkout_subtotalPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_subtotalPrice {
@@ -215,10 +170,6 @@ export interface Checkout_availableShippingMethods_price {
    * Amount of money.
    */
   amount: number;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_availableShippingMethods {
@@ -241,10 +192,6 @@ export interface Checkout_shippingMethod_price {
    * Amount of money.
    */
   amount: number;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_shippingMethod {
@@ -267,10 +214,6 @@ export interface Checkout_shippingPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_shippingPrice_net {
@@ -283,10 +226,6 @@ export interface Checkout_shippingPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_shippingPrice {
@@ -311,10 +250,6 @@ export interface Checkout_lines_totalPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_lines_totalPrice_net {
@@ -327,10 +262,6 @@ export interface Checkout_lines_totalPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_lines_totalPrice {
@@ -355,10 +286,6 @@ export interface Checkout_lines_variant_pricing_priceUndiscounted_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_lines_variant_pricing_priceUndiscounted_net {
@@ -371,10 +298,6 @@ export interface Checkout_lines_variant_pricing_priceUndiscounted_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_lines_variant_pricing_priceUndiscounted {
@@ -399,10 +322,6 @@ export interface Checkout_lines_variant_pricing_price_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_lines_variant_pricing_price_net {
@@ -415,10 +334,6 @@ export interface Checkout_lines_variant_pricing_price_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface Checkout_lines_variant_pricing_price {
@@ -449,6 +364,46 @@ export interface Checkout_lines_variant_pricing {
   price: Checkout_lines_variant_pricing_price | null;
 }
 
+export interface Checkout_lines_variant_attributes_attribute {
+  __typename: "Attribute";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  /**
+   * Name of an attribute displayed in the interface.
+   */
+  name: string | null;
+}
+
+export interface Checkout_lines_variant_attributes_values {
+  __typename: "AttributeValue";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  /**
+   * Name of a value displayed in the interface.
+   */
+  name: string | null;
+  /**
+   * Name of a value displayed in the interface.
+   */
+  value: string | null;
+}
+
+export interface Checkout_lines_variant_attributes {
+  __typename: "SelectedAttribute";
+  /**
+   * Name of an attribute displayed in the interface.
+   */
+  attribute: Checkout_lines_variant_attributes_attribute;
+  /**
+   * Values of an attribute.
+   */
+  values: (Checkout_lines_variant_attributes_values | null)[];
+}
+
 export interface Checkout_lines_variant_product_thumbnail {
   __typename: "Image";
   /**
@@ -469,6 +424,11 @@ export interface Checkout_lines_variant_product_thumbnail2x {
   url: string;
 }
 
+export interface Checkout_lines_variant_product_productType {
+  __typename: "ProductType";
+  isShippingRequired: boolean;
+}
+
 export interface Checkout_lines_variant_product {
   __typename: "Product";
   /**
@@ -484,23 +444,33 @@ export interface Checkout_lines_variant_product {
    * The main thumbnail for a product.
    */
   thumbnail2x: Checkout_lines_variant_product_thumbnail2x | null;
+  productType: Checkout_lines_variant_product_productType;
 }
 
 export interface Checkout_lines_variant {
   __typename: "ProductVariant";
   /**
-   * Quantity of a product available for sale.
-   */
-  stockQuantity: number;
-  /**
    * The ID of the object.
    */
   id: string;
   name: string;
+  sku: string;
+  /**
+   * Quantity of a product available for sale.
+   */
+  stockQuantity: number;
+  /**
+   * Whether the variant is in stock and visible or not.
+   */
+  isAvailable: boolean | null;
   /**
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */
   pricing: Checkout_lines_variant_pricing | null;
+  /**
+   * List of attributes assigned to this variant.
+   */
+  attributes: Checkout_lines_variant_attributes[];
   product: Checkout_lines_variant_product;
 }
 
@@ -518,18 +488,25 @@ export interface Checkout_lines {
   variant: Checkout_lines_variant;
 }
 
+export interface Checkout_discount {
+  __typename: "Money";
+  /**
+   * Currency code.
+   */
+  currency: string;
+  /**
+   * Amount of money.
+   */
+  amount: number;
+}
+
 export interface Checkout {
   __typename: "Checkout";
-  /**
-   * List of available payment gateways.
-   */
-  availablePaymentGateways: (Checkout_availablePaymentGateways | null)[];
   token: any;
   /**
    * The ID of the object.
    */
   id: string;
-  user: Checkout_user | null;
   /**
    * The sum of the the checkout line prices, with all the taxes,shipping costs, and discounts included.
    */
@@ -557,4 +534,12 @@ export interface Checkout {
    * A list of checkout lines, each containing information about an item in the checkout.
    */
   lines: (Checkout_lines | null)[] | null;
+  /**
+   * Returns True, if checkout requires shipping.
+   */
+  isShippingRequired: boolean;
+  discount: Checkout_discount | null;
+  discountName: string | null;
+  translatedDiscountName: string | null;
+  voucherCode: string | null;
 }

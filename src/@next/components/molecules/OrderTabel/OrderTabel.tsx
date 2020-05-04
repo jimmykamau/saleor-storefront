@@ -1,7 +1,8 @@
-import { Trans } from "@lingui/react";
 import React from "react";
 import Media from "react-media";
 import { ThemeContext } from "styled-components";
+
+import { TaxedMoney } from "@components/containers";
 
 import { Thumbnail } from "..";
 import { generateProductUrl } from "../../../../core/utils";
@@ -11,25 +12,15 @@ import { IProps } from "./types";
 
 const header = (matches: boolean) => (
   <S.HeaderRow>
-    <S.IndexNumber>
-      <Trans id="Index Number" />
-    </S.IndexNumber>
+    <S.IndexNumber>Index Number</S.IndexNumber>
     {matches && (
       <>
-        <S.ProductsOrdered>
-          <Trans id="Products Ordered" />
-        </S.ProductsOrdered>
-        <S.DateOfOrder>
-          <Trans id="Date of Order" />
-        </S.DateOfOrder>
-        <S.Value>
-          <Trans id="Value" />
-        </S.Value>
+        <S.ProductsOrdered>Products Ordered</S.ProductsOrdered>
+        <S.DateOfOrder>Date of Order</S.DateOfOrder>
+        <S.Value>Value</S.Value>
       </>
     )}
-    <S.Status>
-      <Trans id="Status" />
-    </S.Status>
+    <S.Status>Status</S.Status>
   </S.HeaderRow>
 );
 
@@ -39,7 +30,7 @@ export const OrderTabel: React.FC<IProps> = ({ orders, history }: IProps) => {
     <S.Wrapper>
       <Media
         query={{
-          minWidth: theme.breakpoints.mediumScreen,
+          minWidth: theme.breakpoints.largeScreen,
         }}
       >
         {(matches: boolean) => {
@@ -51,10 +42,11 @@ export const OrderTabel: React.FC<IProps> = ({ orders, history }: IProps) => {
                   const date = new Date(order.node.created);
                   return (
                     <S.Row
+                      data-testid="order__row"
                       key={order.node.number}
                       onClick={evt => {
                         evt.stopPropagation();
-                        history.push(`/order/${order.node.token}`);
+                        history.push(`/order-history/${order.node.token}`);
                       }}
                     >
                       <S.IndexNumber>{order.node.number}</S.IndexNumber>
@@ -84,7 +76,9 @@ export const OrderTabel: React.FC<IProps> = ({ orders, history }: IProps) => {
                             {`${date.getMonth() +
                               1}/${date.getDate()}/${date.getFullYear()}`}
                           </S.DateOfOrder>
-                          <S.Value>{order.node.total.gross.localized}</S.Value>
+                          <S.Value>
+                            <TaxedMoney taxedMoney={order.node.total} />
+                          </S.Value>
                         </>
                       ) : (
                         ""

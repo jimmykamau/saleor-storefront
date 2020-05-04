@@ -1,21 +1,25 @@
 import React from "react";
-
-import { I18nContext } from "..";
 import { IProps } from "./types";
 
-export const Money: React.FC<IProps> = ({ money, defaultValue }: IProps) => (
-  <I18nContext.Consumer>
-    {({ language }) => {
-      if (!money) {
-        return defaultValue;
-      }
-      return money.amount.toLocaleString(language, {
-        currency: money.currency,
-        style: "currency",
-      });
-    }}
-  </I18nContext.Consumer>
-);
+export const Money: React.FC<IProps> = ({
+  money,
+  defaultValue,
+  ...props
+}: IProps) => {
+  if (!money) {
+    return <span {...props}>{defaultValue}</span>;
+  }
+  return (
+    <span {...props}>
+      {money.currency && money.currency !== ""
+        ? money.amount.toLocaleString(undefined, {
+            currency: money.currency,
+            style: "currency",
+          })
+        : money.amount.toString()}
+    </span>
+  );
+};
 
 Money.displayName = "Money";
 export default Money;

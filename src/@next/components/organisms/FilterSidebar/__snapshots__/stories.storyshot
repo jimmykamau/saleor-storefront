@@ -40,6 +40,94 @@ exports[`Storyshots @components/organisms/FilterSidebar default 1`] = `
   color: #513CA3;
 }
 
+.c9 {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  margin-left: -4px;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  cursor: pointer;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-right: 1.25rem;
+}
+
+.c10 input[type="checkbox"] {
+  display: none;
+  position: relative;
+  right: -999em;
+}
+
+.c10 div {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 26px;
+  width: 26px;
+}
+
+.c10 div span {
+  border: 1px solid rgb(33,18,94);
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+
+.c8:hover .c10 div {
+  border-radius: 50%;
+  border: 1px solid;
+  border-color: rgba(33,18,94,0.1);
+  background-color: rgba(33,18,94,0.1);
+}
+
+.c10 div:focus {
+  border-radius: 50%;
+  border: 1px solid;
+  outline: none;
+  border-color: rgba(33,18,94,0.2);
+  background-color: rgba(33,18,94,0.2);
+}
+
+.c10 input:checked + div span {
+  background-clip: content-box;
+  padding: 2px;
+  background-color: rgb(33,18,94);
+}
+
 .c5 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -93,26 +181,6 @@ exports[`Storyshots @components/organisms/FilterSidebar default 1`] = `
   padding-bottom: 1.5rem;
 }
 
-.c9 {
-  width: 100%;
-  margin-bottom: 1.25rem;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-  margin-left: -4px;
-}
-
 .c13 {
   border-bottom: 1px solid #f1f5f5;
   width: 95%;
@@ -120,75 +188,6 @@ exports[`Storyshots @components/organisms/FilterSidebar default 1`] = `
 
 .c11 {
   padding-bottom: 1.25rem;
-}
-
-.c10 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  cursor: pointer;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  padding-right: 1.25rem;
-}
-
-.c10 input[type="checkbox"] {
-  display: none;
-  position: relative;
-  right: -999em;
-}
-
-.c10 div {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  height: 26px;
-  width: 26px;
-}
-
-.c10 div span {
-  border: 1px solid rgb(33,18,94);
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  z-index: 10;
-}
-
-.c8:hover .c10 div {
-  border-radius: 50%;
-  border: 1px solid;
-  border-color: rgba(33,18,94,0.1);
-  background-color: rgba(33,18,94,0.1);
-}
-
-.c10 div:focus {
-  border-radius: 50%;
-  border: 1px solid;
-  outline: none;
-  border-color: rgba(33,18,94,0.2);
-  background-color: rgba(33,18,94,0.2);
-}
-
-.c10 input:checked + div span {
-  background-clip: content-box;
-  padding: 2px;
-  background-color: rgb(33,18,94);
 }
 
 .c2 {
@@ -295,6 +294,7 @@ exports[`Storyshots @components/organisms/FilterSidebar default 1`] = `
     >
       <div
         className="c3"
+        data-cy="filter-sidebar"
       >
         <div
           className="c4"
@@ -304,6 +304,7 @@ exports[`Storyshots @components/organisms/FilterSidebar default 1`] = `
           </span>
           <div
             className="c5"
+            data-cy="icon_button"
             onClick={[Function]}
           >
             <svg

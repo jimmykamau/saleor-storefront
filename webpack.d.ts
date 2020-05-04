@@ -13,6 +13,8 @@ declare module "query-string";
 // This was copied from src/@sdk/global.d.ts to make TS compiler happy
 declare interface Window {
   PasswordCredential: any;
+  Stripe: any;
+  Cypress?: any;
 }
 
 declare interface Navigator {

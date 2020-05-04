@@ -6,13 +6,16 @@ import { ProductListHeader } from ".";
 
 const clearFilterMock = jest.fn();
 const onChangeMock = jest.fn();
+const onCloseFilterAttributeMock = jest.fn();
 const openFiltersMenuMock = jest.fn();
 
 const DEFAULT_PROPS = {
   activeFilters: 0,
+  activeFiltersAttributes: [],
   clearFilters: clearFilterMock,
   numberOfProducts: 255,
   onChange: onChangeMock,
+  onCloseFilterAttribute: onCloseFilterAttributeMock,
   openFiltersMenu: openFiltersMenuMock,
   sortOptions: [
     {
@@ -27,7 +30,6 @@ const DEFAULT_PROPS = {
 };
 
 describe("<ProductListHeader />", () => {
-  // Example test
   it("exists", () => {
     const wrapper = shallow(<ProductListHeader {...DEFAULT_PROPS} />);
 

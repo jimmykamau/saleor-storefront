@@ -154,6 +154,7 @@ exports[`Storyshots @components/molecules/OrderTabel default 1`] = `
     </div>
     <div
       className="c1"
+      data-testid="order__row"
       onClick={[Function]}
     >
       <div
@@ -183,7 +184,9 @@ exports[`Storyshots @components/molecules/OrderTabel default 1`] = `
       <div
         className="c6"
       >
-        $42.91
+        <span>
+          
+        </span>
       </div>
       <div
         className="c7"
@@ -193,6 +196,7 @@ exports[`Storyshots @components/molecules/OrderTabel default 1`] = `
     </div>
     <div
       className="c1"
+      data-testid="order__row"
       onClick={[Function]}
     >
       <div
@@ -222,7 +226,9 @@ exports[`Storyshots @components/molecules/OrderTabel default 1`] = `
       <div
         className="c6"
       >
-        $29.24
+        <span>
+          
+        </span>
       </div>
       <div
         className="c7"

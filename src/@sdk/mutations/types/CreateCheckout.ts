@@ -21,35 +21,6 @@ export interface CreateCheckout_checkoutCreate_errors {
   message: string | null;
 }
 
-export interface CreateCheckout_checkoutCreate_checkout_availablePaymentGateways_config {
-  __typename: "GatewayConfigLine";
-  /**
-   * Gateway config key.
-   */
-  field: string;
-  /**
-   * Gateway config value for key.
-   */
-  value: string | null;
-}
-
-export interface CreateCheckout_checkoutCreate_checkout_availablePaymentGateways {
-  __typename: "PaymentGateway";
-  /**
-   * Payment gateway name.
-   */
-  name: string;
-  /**
-   * Payment gateway client configuration.
-   */
-  config: CreateCheckout_checkoutCreate_checkout_availablePaymentGateways_config[];
-}
-
-export interface CreateCheckout_checkoutCreate_checkout_user {
-  __typename: "User";
-  email: string;
-}
-
 export interface CreateCheckout_checkoutCreate_checkout_totalPrice_gross {
   __typename: "Money";
   /**
@@ -60,10 +31,6 @@ export interface CreateCheckout_checkoutCreate_checkout_totalPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_totalPrice_net {
@@ -76,10 +43,6 @@ export interface CreateCheckout_checkoutCreate_checkout_totalPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_totalPrice {
@@ -104,10 +67,6 @@ export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice_net {
@@ -120,10 +79,6 @@ export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_subtotalPrice {
@@ -230,10 +185,6 @@ export interface CreateCheckout_checkoutCreate_checkout_availableShippingMethods
    * Amount of money.
    */
   amount: number;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_availableShippingMethods {
@@ -256,10 +207,6 @@ export interface CreateCheckout_checkoutCreate_checkout_shippingMethod_price {
    * Amount of money.
    */
   amount: number;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_shippingMethod {
@@ -282,10 +229,6 @@ export interface CreateCheckout_checkoutCreate_checkout_shippingPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_shippingPrice_net {
@@ -298,10 +241,6 @@ export interface CreateCheckout_checkoutCreate_checkout_shippingPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_shippingPrice {
@@ -326,10 +265,6 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice_gross {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice_net {
@@ -342,10 +277,6 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice_net {
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice {
@@ -370,10 +301,6 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_priceUndiscounted_net {
@@ -386,10 +313,6 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_priceUndiscounted {
@@ -414,10 +337,6 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_price_net {
@@ -430,10 +349,6 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_pr
    * Currency code.
    */
   currency: string;
-  /**
-   * Money formatted according to the current locale.
-   */
-  localized: string;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_price {
@@ -464,6 +379,46 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing {
   price: CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_price | null;
 }
 
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_attributes_attribute {
+  __typename: "Attribute";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  /**
+   * Name of an attribute displayed in the interface.
+   */
+  name: string | null;
+}
+
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_attributes_values {
+  __typename: "AttributeValue";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  /**
+   * Name of a value displayed in the interface.
+   */
+  name: string | null;
+  /**
+   * Name of a value displayed in the interface.
+   */
+  value: string | null;
+}
+
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_attributes {
+  __typename: "SelectedAttribute";
+  /**
+   * Name of an attribute displayed in the interface.
+   */
+  attribute: CreateCheckout_checkoutCreate_checkout_lines_variant_attributes_attribute;
+  /**
+   * Values of an attribute.
+   */
+  values: (CreateCheckout_checkoutCreate_checkout_lines_variant_attributes_values | null)[];
+}
+
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product_thumbnail {
   __typename: "Image";
   /**
@@ -484,6 +439,11 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product_th
   url: string;
 }
 
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product_productType {
+  __typename: "ProductType";
+  isShippingRequired: boolean;
+}
+
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product {
   __typename: "Product";
   /**
@@ -499,23 +459,33 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product {
    * The main thumbnail for a product.
    */
   thumbnail2x: CreateCheckout_checkoutCreate_checkout_lines_variant_product_thumbnail2x | null;
+  productType: CreateCheckout_checkoutCreate_checkout_lines_variant_product_productType;
 }
 
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant {
   __typename: "ProductVariant";
   /**
-   * Quantity of a product available for sale.
-   */
-  stockQuantity: number;
-  /**
    * The ID of the object.
    */
   id: string;
   name: string;
+  sku: string;
+  /**
+   * Quantity of a product available for sale.
+   */
+  stockQuantity: number;
+  /**
+   * Whether the variant is in stock and visible or not.
+   */
+  isAvailable: boolean | null;
   /**
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */
   pricing: CreateCheckout_checkoutCreate_checkout_lines_variant_pricing | null;
+  /**
+   * List of attributes assigned to this variant.
+   */
+  attributes: CreateCheckout_checkoutCreate_checkout_lines_variant_attributes[];
   product: CreateCheckout_checkoutCreate_checkout_lines_variant_product;
 }
 
@@ -533,18 +503,25 @@ export interface CreateCheckout_checkoutCreate_checkout_lines {
   variant: CreateCheckout_checkoutCreate_checkout_lines_variant;
 }
 
+export interface CreateCheckout_checkoutCreate_checkout_discount {
+  __typename: "Money";
+  /**
+   * Currency code.
+   */
+  currency: string;
+  /**
+   * Amount of money.
+   */
+  amount: number;
+}
+
 export interface CreateCheckout_checkoutCreate_checkout {
   __typename: "Checkout";
-  /**
-   * List of available payment gateways.
-   */
-  availablePaymentGateways: (CreateCheckout_checkoutCreate_checkout_availablePaymentGateways | null)[];
   token: any;
   /**
    * The ID of the object.
    */
   id: string;
-  user: CreateCheckout_checkoutCreate_checkout_user | null;
   /**
    * The sum of the the checkout line prices, with all the taxes,shipping costs, and discounts included.
    */
@@ -572,6 +549,14 @@ export interface CreateCheckout_checkoutCreate_checkout {
    * A list of checkout lines, each containing information about an item in the checkout.
    */
   lines: (CreateCheckout_checkoutCreate_checkout_lines | null)[] | null;
+  /**
+   * Returns True, if checkout requires shipping.
+   */
+  isShippingRequired: boolean;
+  discount: CreateCheckout_checkoutCreate_checkout_discount | null;
+  discountName: string | null;
+  translatedDiscountName: string | null;
+  voucherCode: string | null;
 }
 
 export interface CreateCheckout_checkoutCreate {
@@ -579,7 +564,7 @@ export interface CreateCheckout_checkoutCreate {
   /**
    * List of errors that occurred executing the mutation.
    */
-  errors: CreateCheckout_checkoutCreate_errors[] | null;
+  errors: CreateCheckout_checkoutCreate_errors[];
   checkout: CreateCheckout_checkoutCreate_checkout | null;
 }
 
