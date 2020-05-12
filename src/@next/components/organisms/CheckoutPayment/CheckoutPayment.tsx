@@ -166,6 +166,7 @@ const CheckoutPayment: React.FC<IProps> = ({
           selectedPaymentGateway={selectedPaymentGateway}
           selectedPaymentGatewayToken={selectedPaymentGatewayToken}
           selectPaymentGateway={selectPaymentGateway}
+          billingAddress={checkoutBillingAddress}
         />
       </section>
     </S.Wrapper>

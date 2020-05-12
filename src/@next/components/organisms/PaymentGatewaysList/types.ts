@@ -1,4 +1,4 @@
-import { ICardData, IFormError, IPaymentGateway } from "@types";
+import { IAddress, ICardData, IFormError, IPaymentGateway } from "@types";
 
 export interface IProps {
   /**
@@ -37,4 +37,6 @@ export interface IProps {
     token: string,
     cardData?: ICardData
   ) => void;
+
+  billingAddress?: IAddress | null | undefined;
 }

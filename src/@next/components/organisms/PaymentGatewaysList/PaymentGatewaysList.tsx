@@ -19,6 +19,7 @@ const PaymentGatewaysList: React.FC<IProps> = ({
   selectedPaymentGateway,
   selectedPaymentGatewayToken,
   selectPaymentGateway,
+  billingAddress,
   formRef,
   formId,
   processPayment,
