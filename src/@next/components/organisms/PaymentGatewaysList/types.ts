@@ -39,4 +39,8 @@ export interface IProps {
   ) => void;
 
   billingAddress?: IAddress | null | undefined;
+  /**
+   * Method called when gateway error occured.
+   */
+  onError: (errors: IFormError[]) => void;
 }
