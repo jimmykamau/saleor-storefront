@@ -6,6 +6,7 @@ import { PROVIDERS } from "@temp/core/config";
 import {
   BraintreePaymentGateway,
   DummyPaymentGateway,
+  MpesaPaymentGateway,
   StripePaymentGateway,
 } from "..";
 import * as S from "./styles";
@@ -89,6 +90,36 @@ const PaymentGatewaysList: React.FC<IProps> = ({
                     formId={formId}
                     processPayment={token => processPayment(id, token)}
                     initialStatus={selectedPaymentGatewayToken}
+                  />
+                )}
+              </div>
+            );
+          
+          case PROVIDERS.MPESA.label:
+            return (
+              <div key={index}>
+                <S.Tile checked={checked}>
+                  <Radio
+                    data-cy="checkoutPaymentGatewayMpesaInput"
+                    name="payment-method"
+                    value="Lipa na M-PESA"
+                    checked={checked}
+                    onChange={() =>
+                      selectPaymentGateway && selectPaymentGateway(id)
+                    }
+                    customLabel={true}
+                  >
+                    <span data-cy="checkoutPaymentGatewayMpesaName">
+                      {name}
+                    </span>
+                  </Radio>
+                </S.Tile>
+                {checked && (
+                  <MpesaPaymentGateway
+                    formRef={formRef}
+                    formId={formId}
+                    address={billingAddress}
+                    processPayment={token => processPayment(id, token)}
                   />
                 )}
               </div>

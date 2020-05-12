@@ -51,6 +51,8 @@ const CheckoutReviewSubpageWithRef: RefForwardingComponent<
       }`;
     } else if (payment?.creditCard) {
       return `Ending in ${payment?.creditCard.lastDigits}`;
+    } else if (payment?.gateway === "olduka.payments.mpesa") {
+      return `Lipa na M-PESA: ${payment?.token}`
     }
     return ``;
   };
