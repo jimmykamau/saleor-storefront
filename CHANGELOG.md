@@ -4,6 +4,11 @@ All notable, unreleased changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 2.10.1
+
+- Replace stockQuantity field with quantityAvailable - #723 by @AlicjaSzu
+- Regenerate types - #712 by @dominik-zeglen
+
 ## 2.10.0
 
 - Account confirmation mechanism - #565 by @tomaszszymanski129
