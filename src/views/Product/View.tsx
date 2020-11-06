@@ -14,10 +14,7 @@ import { getGraphqlIdFromDBId, maybe } from "../../core/utils";
 import { ProductDetails_product } from "./gqlTypes/ProductDetails";
 import Page from "./Page";
 import { TypedProductDetailsQuery } from "./queries";
-<<<<<<< HEAD
-=======
 import { IProps } from "./types";
->>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 
 const canDisplay = (product: ProductDetails_product) =>
   maybe(

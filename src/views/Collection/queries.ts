@@ -6,13 +6,10 @@ import {
   productPricingFragment,
 } from "../Product/queries";
 import { Collection, CollectionVariables } from "./gqlTypes/Collection";
-<<<<<<< HEAD
-=======
 import {
   CollectionProducts,
   CollectionProductsVariables,
 } from "./gqlTypes/CollectionProducts";
->>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 
 export const collectionProductsDataQuery = gql`
   query Collection($id: ID!) {

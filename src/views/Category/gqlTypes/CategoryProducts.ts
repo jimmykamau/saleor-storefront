@@ -2,11 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-<<<<<<< HEAD:src/@sdk/queries/gqlTypes/ProductList.ts
-import { AttributeInput, ProductOrder } from "./../../gqlTypes/globalTypes";
-=======
 import { AttributeInput, ProductOrder } from "./../../../../gqlTypes/globalTypes";
->>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6:src/views/Category/gqlTypes/CategoryProducts.ts
 
 // ====================================================
 // GraphQL query operation: CategoryProducts

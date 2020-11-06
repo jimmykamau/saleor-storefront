@@ -16,13 +16,6 @@ import { generateCategoryUrl, generateProductUrl } from "../../core/utils";
 import GalleryCarousel from "./GalleryCarousel";
 import { ProductDetails_product } from "./gqlTypes/ProductDetails";
 import OtherProducts from "./Other";
-<<<<<<< HEAD
-
-import { ICheckoutModelLine } from "@sdk/repository";
-import { ProductDescription as NewProductDescription } from "../../@next/components/molecules";
-import { ProductGallery } from "../../@next/components/organisms/";
-=======
->>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 
 import { structuredData } from "../../core/SEO/Product/structuredData";
 import { IProps } from "./types";

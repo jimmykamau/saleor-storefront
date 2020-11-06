@@ -17,12 +17,8 @@ import { FilterSidebar } from "../../@next/components/organisms/FilterSidebar";
 
 import { maybe } from "../../core/utils";
 
-<<<<<<< HEAD
-import { Category_category, Category_products } from "./gqlTypes/Category";
-=======
 import { Category_category } from "./gqlTypes/Category";
 import { CategoryProducts_products } from "./gqlTypes/CategoryProducts";
->>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 
 interface SortItem {
   label: string;

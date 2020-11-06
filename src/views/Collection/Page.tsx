@@ -11,15 +11,8 @@ import { Breadcrumbs, ProductsFeatured } from "../../components";
 import { getDBIdFromGraphqlId, maybe } from "../../core/utils";
 
 import { FilterSidebar } from "../../@next/components/organisms/FilterSidebar";
-<<<<<<< HEAD
-import {
-  Collection_collection,
-  Collection_products,
-} from "./gqlTypes/Collection";
-=======
 import { Collection_collection } from "./gqlTypes/Collection";
 import { CollectionProducts_collection_products } from "./gqlTypes/CollectionProducts";
->>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 
 interface SortItem {
   label: string;
