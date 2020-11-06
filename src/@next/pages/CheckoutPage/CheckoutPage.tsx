@@ -1,14 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Redirect, useLocation } from "react-router-dom";
+import { useIntl } from "react-intl";
+import { Redirect, useLocation, useHistory } from "react-router-dom";
 
 import { Button, Loader } from "@components/atoms";
 import { CheckoutProgressBar } from "@components/molecules";
-import { CartSummary } from "@components/organisms";
+import {
+  CartSummary,
+  PaymentGatewaysList,
+  translateAdyenConfirmationError,
+  adyenNotNegativeConfirmationStatusCodes,
+} from "@components/organisms";
 import { Checkout } from "@components/templates";
-import { IItems } from "@sdk/api/Cart/types";
-import { useCart, useCheckout } from "@sdk/react";
-import { CHECKOUT_STEPS } from "@temp/core/config";
-import { ITaxedMoney } from "@types";
+import { useCart, useCheckout } from "@saleor/sdk";
+import { IItems } from "@saleor/sdk/lib/api/Cart/types";
+import { CHECKOUT_STEPS, CheckoutStep } from "@temp/core/config";
+import { checkoutMessages } from "@temp/intl";
+import { ITaxedMoney, ICheckoutStep, ICardData, IFormError } from "@types";
+import { parseQueryString } from "@temp/core/utils";
+import { CompleteCheckout_checkoutComplete_order } from "@saleor/sdk/lib/mutations/gqlTypes/CompleteCheckout";
 
 import { CheckoutRouter } from "./CheckoutRouter";
 import {
@@ -66,33 +75,32 @@ const prepareCartSummary = (
 const getCheckoutProgress = (
   loaded: boolean,
   activeStepIndex: number,
-  isShippingRequired: boolean
+  steps: ICheckoutStep[]
 ) => {
-  const steps = isShippingRequired
-    ? CHECKOUT_STEPS
-    : CHECKOUT_STEPS.filter(
-        ({ onlyIfShippingRequired }) => !onlyIfShippingRequired
-      );
-
   return loaded ? (
     <CheckoutProgressBar steps={steps} activeStep={activeStepIndex} />
   ) : null;
 };
 
-const getButton = (text: string, onClick: () => void) => {
+const getButton = (text?: string, onClick?: () => void) => {
   if (text) {
     return (
-      <Button data-cy="checkoutPageBtnNextStep" onClick={onClick} type="submit">
+      <Button
+        testingContext="checkoutPageNextStepButton"
+        onClick={onClick}
+        type="submit"
+      >
         {text}
       </Button>
     );
-  } else {
-    return null;
   }
+  return null;
 };
 
 const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const history = useHistory();
+  const querystring = parseQueryString(location);
   const {
     loaded: cartLoaded,
     shippingPrice,
@@ -101,13 +109,22 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
     totalPrice,
     items,
   } = useCart();
-  const { loaded: checkoutLoaded, checkout, payment } = useCheckout();
+  const {
+    loaded: checkoutLoaded,
+    checkout,
+    payment,
+    availablePaymentGateways,
+    createPayment,
+    completeCheckout,
+  } = useCheckout();
+  const intl = useIntl();
 
   if (cartLoaded && (!items || !items?.length)) {
     return <Redirect to="/cart/" />;
   }
 
   const [submitInProgress, setSubmitInProgress] = useState(false);
+  const [paymentConfirmation, setPaymentConfirmation] = useState(false);
 
   const [selectedPaymentGateway, setSelectedPaymentGateway] = useState<
     string | undefined
@@ -116,6 +133,9 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
     selectedPaymentGatewayToken,
     setSelectedPaymentGatewayToken,
   ] = useState<string | undefined>(payment?.token);
+  const [paymentGatewayErrors, setPaymentGatewayErrors] = useState<
+    IFormError[]
+  >([]);
 
   useEffect(() => {
     setSelectedPaymentGateway(payment?.gateway);
@@ -124,11 +144,29 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
     setSelectedPaymentGatewayToken(payment?.token);
   }, [payment?.token]);
 
-  const matchingStepIndex = CHECKOUT_STEPS.findIndex(
-    ({ link }) => link === pathname
+  const isShippingRequiredForProducts =
+    items &&
+    items.some(
+      ({ variant }) => variant.product?.productType.isShippingRequired
+    );
+
+  const stepsWithViews = CHECKOUT_STEPS.filter(
+    ({ withoutOwnView }) => !withoutOwnView
   );
-  const activeStepIndex = matchingStepIndex !== -1 ? matchingStepIndex : 3;
-  const activeStep = CHECKOUT_STEPS[activeStepIndex];
+  const steps = isShippingRequiredForProducts
+    ? stepsWithViews
+    : stepsWithViews.filter(
+        ({ onlyIfShippingRequired }) => !onlyIfShippingRequired
+      );
+  const getActiveStepIndex = () => {
+    const matchingStepIndex = steps.findIndex(
+      ({ link }) => link === location.pathname
+    );
+    return matchingStepIndex !== -1 ? matchingStepIndex : steps.length - 1;
+  };
+  const getActiveStep = () => {
+    return steps[getActiveStepIndex()];
+  };
 
   const checkoutAddressSubpageRef = useRef<ICheckoutAddressSubpageHandles>(
     null
@@ -140,9 +178,14 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
     null
   );
   const checkoutReviewSubpageRef = useRef<ICheckoutReviewSubpageHandles>(null);
+  const checkoutGatewayFormId = "gateway-form";
+  const checkoutGatewayFormRef = useRef<HTMLFormElement>(null);
 
   const handleNextStepClick = () => {
-    switch (activeStepIndex) {
+    // Some magic above and below ensures that the activeStepIndex will always
+    // be in 0-3 range
+    /* eslint-disable default-case */
+    switch (getActiveStep().index) {
       case 0:
         if (checkoutAddressSubpageRef.current?.submitAddress) {
           checkoutAddressSubpageRef.current?.submitAddress();
@@ -165,6 +208,21 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
         break;
     }
   };
+  const handleStepSubmitSuccess = (
+    currentStep: CheckoutStep,
+    data?: object
+  ) => {
+    const activeStepIndex = getActiveStepIndex();
+    if (currentStep === CheckoutStep.Review) {
+      history.push({
+        pathname: "/order-finalized",
+        state: data,
+      });
+    } else {
+      history.push(steps[activeStepIndex + 1].link);
+    }
+  };
+
   const shippingTaxedPrice =
     checkout?.shippingMethod?.id && shippingPrice
       ? {
@@ -183,10 +241,14 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
         items={items}
         checkout={checkout}
         payment={payment}
+        totalPrice={totalPrice}
         renderAddress={props => (
           <CheckoutAddressSubpage
             ref={checkoutAddressSubpageRef}
             changeSubmitProgress={setSubmitInProgress}
+            onSubmitSuccess={() =>
+              handleStepSubmitSuccess(CheckoutStep.Address)
+            }
             {...props}
           />
         )}
@@ -194,24 +256,33 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
           <CheckoutShippingSubpage
             ref={checkoutShippingSubpageRef}
             changeSubmitProgress={setSubmitInProgress}
+            onSubmitSuccess={() =>
+              handleStepSubmitSuccess(CheckoutStep.Shipping)
+            }
             {...props}
           />
         )}
         renderPayment={props => (
           <CheckoutPaymentSubpage
             ref={checkoutPaymentSubpageRef}
-            selectedPaymentGateway={selectedPaymentGateway}
-            selectedPaymentGatewayToken={selectedPaymentGatewayToken}
+            paymentGatewayFormRef={checkoutGatewayFormRef}
             changeSubmitProgress={setSubmitInProgress}
-            selectPaymentGateway={setSelectedPaymentGateway}
+            onSubmitSuccess={() =>
+              handleStepSubmitSuccess(CheckoutStep.Payment)
+            }
+            onPaymentGatewayError={setPaymentGatewayErrors}
             {...props}
           />
         )}
         renderReview={props => (
           <CheckoutReviewSubpage
             ref={checkoutReviewSubpageRef}
+            paymentGatewayFormRef={checkoutGatewayFormRef}
             selectedPaymentGatewayToken={selectedPaymentGatewayToken}
             changeSubmitProgress={setSubmitInProgress}
+            onSubmitSuccess={data =>
+              handleStepSubmitSuccess(CheckoutStep.Review, data)
+            }
             {...props}
           />
         )}
@@ -220,11 +291,173 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
       <Loader />
     );
 
-  const isShippingRequiredForProducts =
-    items &&
-    items.some(
-      ({ variant }) => variant.product?.productType.isShippingRequired
-    );
+  const handleProcessPayment = async (
+    gateway: string,
+    token?: string,
+    cardData?: ICardData
+  ) => {
+    const paymentConfirmStepLink = CHECKOUT_STEPS.find(
+      step => step.step === CheckoutStep.PaymentConfirm
+    )?.link;
+    const { dataError } = await createPayment({
+      gateway,
+      token,
+      creditCard: cardData,
+      returnUrl: `${window.location.origin}${paymentConfirmStepLink}`,
+    });
+    const errors = dataError?.error;
+    setSubmitInProgress(false);
+    if (errors) {
+      setPaymentGatewayErrors(errors);
+    } else {
+      setPaymentGatewayErrors([]);
+      handleStepSubmitSuccess(CheckoutStep.Payment);
+    }
+  };
+  const handleSubmitPayment = async (paymentData?: object) => {
+    const response = await completeCheckout({ paymentData });
+    return {
+      confirmationData: response.data?.confirmationData,
+      confirmationNeeded: response.data?.confirmationNeeded,
+      order: response.data?.order,
+      errors: response.dataError?.error,
+    };
+  };
+  const handleSubmitPaymentSuccess = (
+    order?: CompleteCheckout_checkoutComplete_order
+  ) => {
+    setSubmitInProgress(false);
+    setPaymentGatewayErrors([]);
+    handleStepSubmitSuccess(CheckoutStep.Review, {
+      id: order?.id,
+      orderNumber: order?.number,
+      token: order?.token,
+    });
+  };
+  const handlePaymentGatewayError = (errors: IFormError[]) => {
+    setSubmitInProgress(false);
+    setPaymentGatewayErrors(errors);
+    const paymentStepLink = steps.find(
+      step => step.step === CheckoutStep.Payment
+    )?.link;
+    if (paymentStepLink) {
+      history.push(paymentStepLink);
+    }
+  };
+
+  const paymentGatewaysView = availablePaymentGateways && (
+    <PaymentGatewaysList
+      paymentGateways={availablePaymentGateways}
+      processPayment={handleProcessPayment}
+      submitPayment={handleSubmitPayment}
+      submitPaymentSuccess={handleSubmitPaymentSuccess}
+      formId={checkoutGatewayFormId}
+      formRef={checkoutGatewayFormRef}
+      selectedPaymentGateway={selectedPaymentGateway}
+      selectedPaymentGatewayToken={selectedPaymentGatewayToken}
+      selectPaymentGateway={setSelectedPaymentGateway}
+      onError={handlePaymentGatewayError}
+      errors={paymentGatewayErrors}
+    />
+  );
+
+  const activeStep = getActiveStep();
+  let buttonText = activeStep.nextActionName;
+  /* eslint-disable default-case */
+  switch (activeStep.nextActionName) {
+    case "Continue to Shipping":
+      buttonText = intl.formatMessage(checkoutMessages.addressNextActionName);
+      break;
+    case "Continue to Payment":
+      buttonText = intl.formatMessage(checkoutMessages.shippingNextActionName);
+      break;
+    case "Continue to Review":
+      buttonText = intl.formatMessage(checkoutMessages.paymentNextActionName);
+      break;
+    case "Place order":
+      buttonText = intl.formatMessage(checkoutMessages.reviewNextActionName);
+      break;
+  }
+
+  useEffect(() => {
+    const paymentConfirmStepLink = CHECKOUT_STEPS.find(
+      step => step.step === CheckoutStep.PaymentConfirm
+    )?.link;
+    if (
+      !submitInProgress &&
+      checkout &&
+      location.pathname === paymentConfirmStepLink &&
+      !paymentConfirmation
+    ) {
+      handlePaymentConfirm();
+    }
+  }, [location.pathname, querystring, submitInProgress, checkout]);
+
+  const handlePaymentConfirm = async () => {
+    /**
+     * Prevent proceeding in confirmation flow in case of gateways that don't support it to prevent unknown bugs.
+     */
+    if (payment?.gateway !== "mirumee.payments.adyen") {
+      const paymentStepLink = steps.find(
+        step => step.step === CheckoutStep.Payment
+      )?.link;
+      if (paymentStepLink) {
+        history.push(paymentStepLink);
+      }
+    }
+
+    setSubmitInProgress(true);
+    setPaymentConfirmation(true);
+    /**
+     * Saleor API creates an order for not fully authorised payments, thus we accept all non negative payment result codes,
+     * assuming the payment is completed, what means we can proceed further.
+     * https://docs.adyen.com/checkout/drop-in-web?tab=http_get_1#step-6-present-payment-result
+     */
+    if (
+      adyenNotNegativeConfirmationStatusCodes.includes(
+        querystring.resultCode as string
+      )
+    ) {
+      const { data, dataError } = await completeCheckout();
+      const errors = dataError?.error;
+      setSubmitInProgress(false);
+      if (errors) {
+        setPaymentGatewayErrors(errors);
+        const paymentStepLink = steps.find(
+          step => step.step === CheckoutStep.Payment
+        )?.link;
+        if (paymentStepLink) {
+          history.push(paymentStepLink);
+        }
+      } else {
+        setPaymentGatewayErrors([]);
+        handleStepSubmitSuccess(CheckoutStep.Review, {
+          id: data?.order?.id,
+          orderNumber: data?.order?.number,
+          token: data?.order?.token,
+        });
+      }
+    } else {
+      setPaymentGatewayErrors([
+        {
+          message: translateAdyenConfirmationError(
+            querystring.resultCode as string,
+            intl
+          ),
+        },
+      ]);
+      const paymentStepLink = steps.find(
+        step => step.step === CheckoutStep.Payment
+      )?.link;
+      if (paymentStepLink) {
+        history.push(paymentStepLink);
+        setSubmitInProgress(false);
+        setPaymentConfirmation(false);
+      }
+    }
+  };
+
+  const activeStepIndex = getActiveStepIndex();
 
   return (
     <Checkout
@@ -232,7 +465,7 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
       navigation={getCheckoutProgress(
         cartLoaded && checkoutLoaded,
         activeStepIndex,
-        !!isShippingRequiredForProducts
+        steps
       )}
       cartSummary={prepareCartSummary(
         totalPrice,
@@ -242,10 +475,9 @@ const CheckoutPage: React.FC<IProps> = ({}: IProps) => {
         items
       )}
       checkout={checkoutView}
-      button={getButton(
-        activeStep.nextActionName.toUpperCase(),
-        handleNextStepClick
-      )}
+      paymentGateways={paymentGatewaysView}
+      hidePaymentGateways={steps[activeStepIndex].step !== CheckoutStep.Payment}
+      button={getButton(buttonText?.toUpperCase(), handleNextStepClick)}
     />
   );
 };

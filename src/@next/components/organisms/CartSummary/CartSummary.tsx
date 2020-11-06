@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { Icon } from "@components/atoms";
 import { TaxedMoney } from "@components/containers";
 import { CartSummaryRow } from "@components/molecules";
+import { commonMessages } from "@temp/intl";
 
 import * as S from "./styles";
 import { ICostLine, ICosts, IProps } from "./types";
@@ -15,23 +17,46 @@ const CostLine = ({
 }: ICostLine) => (
   <S.CostLine last={last}>
     <span>{name}</span>
-    <span data-cy={`cartSummaryCost${name.replace(/\s/g, "")}`}>
+    <span data-test={`cartSummaryCost${name.replace(/\s/g, "")}`}>
       {negative && "- "}
       <TaxedMoney taxedMoney={cost} />
     </span>
   </S.CostLine>
 );
 
-const Costs = ({ subtotal, promoCode, shipping, total }: ICosts) => (
-  <S.Costs>
-    {subtotal && <CostLine name="Subtotal" cost={subtotal} />}
-    {shipping && <CostLine name="Shipping" cost={shipping} />}
-    {promoCode && promoCode.gross.amount > 0 && (
-      <CostLine name="Promo Code" cost={promoCode} negative={true} />
-    )}
-    {total && <CostLine name="Total" cost={total} last={true} />}
-  </S.Costs>
-);
+const Costs = ({ subtotal, promoCode, shipping, total }: ICosts) => {
+  const intl = useIntl();
+  return (
+    <S.Costs>
+      {subtotal && (
+        <CostLine
+          name={intl.formatMessage(commonMessages.subtotal)}
+          cost={subtotal}
+        />
+      )}
+      {shipping && (
+        <CostLine
+          name={intl.formatMessage(commonMessages.shipping)}
+          cost={shipping}
+        />
+      )}
+      {promoCode && promoCode.gross.amount > 0 && (
+        <CostLine
+          name={intl.formatMessage(commonMessages.promoCode)}
+          cost={promoCode}
+          negative
+        />
+      )}
+      {total && (
+        <CostLine
+          name={intl.formatMessage(commonMessages.total)}
+          cost={total}
+          last
+        />
+      )}
+    </S.Costs>
+  );
+};
 
 /**
  * Cart summary displayed in checkout page
@@ -48,10 +73,10 @@ const CartSummary: React.FC<IProps> = ({
   return (
     <S.Wrapper mobileCartOpened={mobileCartOpened}>
       <S.Title
-        data-cy="cartSummaryTitle"
+        data-test="cartSummaryTitle"
         onClick={() => setMobileCartOpened(!mobileCartOpened)}
       >
-        Cart Summary
+        <FormattedMessage defaultMessage="Cart Summary" />
         <S.ArrowUp mobileCartOpened={mobileCartOpened}>
           <Icon name="arrow_up" size={24} />
         </S.ArrowUp>

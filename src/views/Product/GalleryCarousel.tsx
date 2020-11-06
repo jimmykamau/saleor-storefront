@@ -2,7 +2,11 @@ import * as React from "react";
 
 import { CachedImage } from "@components/molecules";
 
+<<<<<<< HEAD
 import { Carousel } from "../../components/";
+=======
+import { Carousel } from "../../components";
+>>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 import { ProductDetails_product_images } from "./gqlTypes/ProductDetails";
 
 import noPhotoImg from "../../images/no-photo.svg";
@@ -38,7 +42,7 @@ const GalleryCarousel: React.FC<{
     >
       {images.map(image => (
         <CachedImage url={image.url || noPhotoImg} key={image.id}>
-          <img src={noPhotoImg} />
+          <img src={noPhotoImg} alt={image.alt} />
         </CachedImage>
       ))}
     </Carousel>

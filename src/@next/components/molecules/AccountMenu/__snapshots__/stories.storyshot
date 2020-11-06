@@ -58,10 +58,11 @@ exports[`Storyshots @components/molecules/AccountMenu default 1`] = `
       <div
         className="c3"
       >
-        MY ACCOUNT
+        My Account
       </div>
       <a
-        data-testid="account_menu__link"
+        data-test="accountMenuLink"
+        data-test-id="/personal-information/"
         href="/personal-information/"
         onClick={[Function]}
       >
@@ -72,29 +73,32 @@ exports[`Storyshots @components/molecules/AccountMenu default 1`] = `
         </div>
       </a>
       <a
-        data-testid="account_menu__link"
+        data-test="accountMenuLink"
+        data-test-id="/address-book/"
         href="/address-book/"
         onClick={[Function]}
       >
         <div
           className="c5"
         >
-          Address Book
+          Address book
         </div>
       </a>
       <a
-        data-testid="account_menu__link"
+        data-test="accountMenuLink"
+        data-test-id="/order-history/"
         href="/order-history/"
         onClick={[Function]}
       >
         <div
           className="c4"
         >
-          Order History
+          Order history
         </div>
       </a>
       <a
-        data-testid="account_menu__link"
+        data-test="accountMenuLink"
+        data-test-id="/payment-options/"
         href="/payment-options/"
         onClick={[Function]}
       >

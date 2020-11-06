@@ -1,8 +1,10 @@
 import React from "react";
+import { FormattedMessage, FormattedDate, useIntl } from "react-intl";
 import Media from "react-media";
 import { ThemeContext } from "styled-components";
 
 import { TaxedMoney } from "@components/containers";
+import { commonMessages, translateOrderStatus } from "@temp/intl";
 
 import { Thumbnail } from "..";
 import { generateProductUrl } from "../../../../core/utils";
@@ -12,20 +14,31 @@ import { IProps } from "./types";
 
 const header = (matches: boolean) => (
   <S.HeaderRow>
-    <S.IndexNumber>Index Number</S.IndexNumber>
+    <S.IndexNumber>
+      <FormattedMessage defaultMessage="Index Number" />
+    </S.IndexNumber>
     {matches && (
       <>
-        <S.ProductsOrdered>Products Ordered</S.ProductsOrdered>
-        <S.DateOfOrder>Date of Order</S.DateOfOrder>
-        <S.Value>Value</S.Value>
+        <S.ProductsOrdered>
+          <FormattedMessage defaultMessage="Products Ordered" />
+        </S.ProductsOrdered>
+        <S.DateOfOrder>
+          <FormattedMessage defaultMessage="Date of Order" />
+        </S.DateOfOrder>
+        <S.Value>
+          <FormattedMessage defaultMessage="Value" />
+        </S.Value>
       </>
     )}
-    <S.Status>Status</S.Status>
+    <S.Status>
+      <FormattedMessage {...commonMessages.status} />
+    </S.Status>
   </S.HeaderRow>
 );
 
 export const OrderTabel: React.FC<IProps> = ({ orders, history }: IProps) => {
   const theme = React.useContext(ThemeContext);
+  const intl = useIntl();
   return (
     <S.Wrapper>
       <Media
@@ -42,7 +55,8 @@ export const OrderTabel: React.FC<IProps> = ({ orders, history }: IProps) => {
                   const date = new Date(order.node.created);
                   return (
                     <S.Row
-                      data-testid="order__row"
+                      data-test="orderEntry"
+                      data-test-id={order.node.number}
                       key={order.node.number}
                       onClick={evt => {
                         evt.stopPropagation();
@@ -73,8 +87,7 @@ export const OrderTabel: React.FC<IProps> = ({ orders, history }: IProps) => {
                               ))}
                           </S.ProductsOrdered>
                           <S.DateOfOrder>
-                            {`${date.getMonth() +
-                              1}/${date.getDate()}/${date.getFullYear()}`}
+                            <FormattedDate value={date} />
                           </S.DateOfOrder>
                           <S.Value>
                             <TaxedMoney taxedMoney={order.node.total} />
@@ -83,7 +96,9 @@ export const OrderTabel: React.FC<IProps> = ({ orders, history }: IProps) => {
                       ) : (
                         ""
                       )}
-                      <S.Status>{order.node.statusDisplay}</S.Status>
+                      <S.Status>
+                        {translateOrderStatus(order.node.statusDisplay, intl)}
+                      </S.Status>
                     </S.Row>
                   );
                 })}

@@ -9,6 +9,8 @@ body {
   font-size: $base-font-size;
   line-height: $base-line-height;
   color: $base-font-color;
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
 
   * {
     box-sizing: border-box;
@@ -36,6 +38,14 @@ body {
 
   p {
     line-height: 1.5rem;
+  }
+
+  strong {
+    font-weight: $bold-font-weight;
+  }
+
+  em {
+    font-style: italic;
   }
 
   #root {

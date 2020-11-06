@@ -1,57 +1,42 @@
-// <reference types="cypress" />
+import { HEADER_SELECTORS } from "../../elements/main-header/header-selectors";
+import { SEARCH_PRODUCTS_SELECTORS_RIGHT_MENU } from "../../elements/products/search-products-selectors";
 
-describe.only("Search", () => {
-  const typedText = "t";
-  let polyfill;
-
-  before(() => {
-    const polyfillUrl = "https://unpkg.com/unfetch/dist/unfetch.umd.js";
-    cy.request(polyfillUrl).then(response => {
-      polyfill = response.body;
-    });
-  });
+describe("Search", () => {
+  const typedText = "shirt";
 
   beforeEach(() => {
-    cy.server();
-    cy.route("POST", `${Cypress.env("API_URI")}`).as("graphqlQuery");
-
-    cy.visit("/", {
-      onBeforeLoad(win) {
-        delete win.fetch;
-        // since the application code does not ship with a polyfill
-        // load a polyfilled "fetch" from the test
-        win.eval(polyfill);
-        win.fetch = win.unfetch;
-      },
-    });
+    cy.visit("/", {});
   });
 
   it("should show input on click", () => {
-    cy.get(".main-menu__search")
+    cy.get(HEADER_SELECTORS.mainMenuSearchButton)
       .click()
-      .get("form.search input")
+      .get(HEADER_SELECTORS.mainMenuSearchInput)
       .should("exist");
   });
 
   it("should search products", () => {
-    cy.get(".main-menu__search")
+    cy.get(HEADER_SELECTORS.mainMenuSearchButton)
       .click()
-      .get("form.search input")
+      .get(HEADER_SELECTORS.mainMenuSearchInput)
       .type(typedText)
-      .get(".search__products.search__products--expanded")
+      .get(SEARCH_PRODUCTS_SELECTORS_RIGHT_MENU.searchProductsExpandedArea)
       .should("exist");
   });
 
   it("should redirect to Search page on form submit", () => {
-    cy.get(".main-menu__search")
+    const showAllresultsButton = "form.search button[type='submit']";
+    const searchPageHeader = ".search-page";
+
+    cy.get(HEADER_SELECTORS.mainMenuSearchButton)
       .click()
-      .get("form.search input")
+      .get(HEADER_SELECTORS.mainMenuSearchInput)
       .type(typedText)
-      .get("form.search button[type='submit']")
+      .get(showAllresultsButton)
       .click();
 
     cy.url().should("include", `/search/?q=${typedText}`);
-    cy.get(".search-page").should("exist");
+    cy.get(searchPageHeader).should("exist");
     cy.focused().should("have.value", typedText);
   });
 });

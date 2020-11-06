@@ -6,12 +6,14 @@ import { FormFooter } from ".";
 
 const cancelBtn = {
   action: action("on cancel"),
+  testingContext: "footerTestButton",
   text: "Cancel",
 };
 
 const DEFAULT_PROPS = {
   submitBtn: {
     action: action("on submit"),
+    testingContext: "footerTestButton",
     text: "Save",
   },
 };

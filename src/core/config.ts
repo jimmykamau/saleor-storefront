@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+
 import { generatePageUrl } from "./utils";
 
 export const BASE_URL = "/";
@@ -14,8 +16,24 @@ export const PROVIDERS = {
     label: "Mpesa",
   },
   STRIPE: {
-    href: "https://js.stripe.com/v3/",
     label: "Stripe",
+  },
+  ADYEN: {
+    label: "Adyen",
+    script: {
+      src:
+        "https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.10.1/adyen.js",
+      integrity:
+        "sha384-wG2z9zSQo61EIvyXmiFCo+zB3y0ZB4hsrXVcANmpP8HLthjoQJQPBh7tZKJSV8jA",
+      crossOrigin: "anonymous",
+    },
+    style: {
+      src:
+        "https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.10.1/adyen.css",
+      integrity:
+        "sha384-8ofgICZZ/k5cC5N7xegqFZOA73H9RQ7H13439JfAZW8Gj3qjuKL2isaTD3GMIhDE",
+      crossOrigin: "anonymous",
+    },
   },
 };
 export const STATIC_PAGES = [
@@ -60,6 +78,7 @@ export enum CheckoutStep {
   Shipping,
   Payment,
   Review,
+  PaymentConfirm,
 }
 export const CHECKOUT_STEPS = [
   {
@@ -67,8 +86,7 @@ export const CHECKOUT_STEPS = [
     link: "/checkout/address",
     name: "Address",
     nextActionName: "Continue to Shipping",
-    nextStepLink: "/checkout/shipping",
-    onlyIfShippingRequired: true,
+    onlyIfShippingRequired: false,
     step: CheckoutStep.Address,
   },
   {
@@ -76,7 +94,6 @@ export const CHECKOUT_STEPS = [
     link: "/checkout/shipping",
     name: "Shipping",
     nextActionName: "Continue to Payment",
-    nextStepLink: "/checkout/payment",
     onlyIfShippingRequired: true,
     step: CheckoutStep.Shipping,
   },
@@ -85,7 +102,6 @@ export const CHECKOUT_STEPS = [
     link: "/checkout/payment",
     name: "Payment",
     nextActionName: "Continue to Review",
-    nextStepLink: "/checkout/review",
     onlyIfShippingRequired: false,
     step: CheckoutStep.Payment,
   },
@@ -94,8 +110,15 @@ export const CHECKOUT_STEPS = [
     link: "/checkout/review",
     name: "Review",
     nextActionName: "Place order",
-    nextStepLink: "/order-finalized",
     onlyIfShippingRequired: false,
     step: CheckoutStep.Review,
+  },
+  {
+    index: 4,
+    link: "/checkout/payment-confirm",
+    name: "Payment confirm",
+    onlyIfShippingRequired: false,
+    step: CheckoutStep.PaymentConfirm,
+    withoutOwnView: true,
   },
 ];

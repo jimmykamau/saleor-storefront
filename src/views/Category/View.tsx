@@ -1,8 +1,11 @@
 import * as React from "react";
+import { useIntl } from "react-intl";
 import { RouteComponentProps } from "react-router";
 
+import { prodListHeaderCommonMsg } from "@temp/intl";
 import { IFilters } from "@types";
 import { StringParam, useQueryParam } from "use-query-params";
+import { Loader } from "@components/atoms";
 import { MetaWrapper, NotFound, OfflinePlaceholder } from "../../components";
 import NetworkStatus from "../../components/NetworkStatus";
 import { PRODUCTS_PER_PAGE } from "../../core/config";
@@ -10,10 +13,12 @@ import {
   convertSortByFromString,
   convertToAttributeScalar,
   getGraphqlIdFromDBId,
-  maybe,
 } from "../../core/utils";
 import Page from "./Page";
-import { TypedCategoryProductsQuery } from "./queries";
+import {
+  TypedCategoryProductsQuery,
+  TypedCategoryProductsDataQuery,
+} from "./queries";
 
 type ViewProps = RouteComponentProps<{
   id: string;
@@ -23,7 +28,7 @@ export const FilterQuerySet = {
   encode(valueObj) {
     const str = [];
     Object.keys(valueObj).forEach(value => {
-      str.push(value + "_" + valueObj[value].join("_"));
+      str.push(`${value}_${valueObj[value].join("_")}`);
     });
     return str.join(".");
   },
@@ -45,6 +50,7 @@ export const View: React.FC<ViewProps> = ({ match }) => {
     "filters",
     FilterQuerySet
   );
+  const intl = useIntl();
 
   const clearFilters = () => {
     setAttributeFilters({});
@@ -96,31 +102,33 @@ export const View: React.FC<ViewProps> = ({ match }) => {
 
   const sortOptions = [
     {
-      label: "Clear...",
+      label: intl.formatMessage(prodListHeaderCommonMsg.sortOptionsClear),
       value: null,
     },
     {
-      label: "Price Low-High",
+      label: intl.formatMessage(prodListHeaderCommonMsg.sortOptionsPrice),
       value: "price",
     },
     {
-      label: "Price High-Low",
+      label: intl.formatMessage(prodListHeaderCommonMsg.sortOptionsPriceDsc),
       value: "-price",
     },
     {
-      label: "Name Increasing",
+      label: intl.formatMessage(prodListHeaderCommonMsg.sortOptionsName),
       value: "name",
     },
     {
-      label: "Name Decreasing",
+      label: intl.formatMessage(prodListHeaderCommonMsg.sortOptionsNameDsc),
       value: "-name",
     },
     {
-      label: "Last updated Ascending",
+      label: intl.formatMessage(prodListHeaderCommonMsg.sortOptionsUpdatedAt),
       value: "updated_at",
     },
     {
-      label: "Last updated Descending",
+      label: intl.formatMessage(
+        prodListHeaderCommonMsg.sortOptionsUpdatedAtDsc
+      ),
       value: "-updated_at",
     },
   ];
@@ -128,76 +136,100 @@ export const View: React.FC<ViewProps> = ({ match }) => {
   return (
     <NetworkStatus>
       {isOnline => (
-        <TypedCategoryProductsQuery
+        <TypedCategoryProductsDataQuery
           variables={variables}
           errorPolicy="all"
           loaderFull
         >
-          {({ loading, data, loadMore }) => {
-            const canDisplayFilters = maybe(
-              () => !!data.attributes.edges && !!data.category.name,
-              false
-            );
-
-            if (canDisplayFilters) {
-              const handleLoadMore = () =>
-                loadMore(
-                  (prev, next) => ({
-                    ...prev,
-                    products: {
-                      ...prev.products,
-                      edges: [...prev.products.edges, ...next.products.edges],
-                      pageInfo: next.products.pageInfo,
-                    },
-                  }),
-                  { after: data.products.pageInfo.endCursor }
-                );
-
-              return (
-                <MetaWrapper
-                  meta={{
-                    description: data.category.seoDescription,
-                    title: data.category.seoTitle,
-                    type: "product.category",
-                  }}
-                >
-                  <Page
-                    clearFilters={clearFilters}
-                    attributes={data.attributes.edges.map(edge => edge.node)}
-                    category={data.category}
-                    displayLoader={loading}
-                    hasNextPage={maybe(
-                      () => data.products.pageInfo.hasNextPage,
-                      false
-                    )}
-                    sortOptions={sortOptions}
-                    activeSortOption={filters.sortBy}
-                    filters={filters}
-                    products={data.products}
-                    onAttributeFiltersChange={onFiltersChange}
-                    onLoadMore={handleLoadMore}
-                    activeFilters={
-                      filters!.attributes
-                        ? Object.keys(filters!.attributes).length
-                        : 0
-                    }
-                    onOrder={value => {
-                      setSort(value.value);
-                    }}
-                  />
-                </MetaWrapper>
-              );
+          {categoryData => {
+            if (categoryData.loading) {
+              return <Loader />;
             }
 
-            if (data && data.category === null) {
+            if (categoryData.data && categoryData.data.category === null) {
               return <NotFound />;
             }
 
             if (!isOnline) {
               return <OfflinePlaceholder />;
             }
+
+            const canDisplayFilters =
+              !!categoryData.data?.attributes?.edges &&
+              !!categoryData.data?.category?.name;
+
+            return (
+              <TypedCategoryProductsQuery variables={variables}>
+                {categoryProducts => {
+                  if (!canDisplayFilters && categoryProducts.loading) {
+                    return <Loader />;
+                  }
+
+                  if (canDisplayFilters) {
+                    const handleLoadMore = () =>
+                      categoryProducts.loadMore(
+                        (prev, next) => ({
+                          ...prev,
+                          products: {
+                            ...prev.products,
+                            edges: [
+                              ...prev.products.edges,
+                              ...next.products.edges,
+                            ],
+                            pageInfo: next.products.pageInfo,
+                          },
+                        }),
+                        {
+                          after:
+                            categoryProducts.data.products.pageInfo.endCursor,
+                        }
+                      );
+
+                    return (
+                      <MetaWrapper
+                        meta={{
+                          description:
+                            categoryData.data.category.seoDescription,
+                          title: categoryData.data.category.seoTitle,
+                          type: "product.category",
+                        }}
+                      >
+                        <Page
+                          clearFilters={clearFilters}
+                          attributes={categoryData.data.attributes.edges.map(
+                            edge => edge.node
+                          )}
+                          category={categoryData.data.category}
+                          displayLoader={categoryData.loading}
+                          hasNextPage={
+                            categoryProducts.data?.products?.pageInfo
+                              .hasNextPage
+                          }
+                          sortOptions={sortOptions}
+                          activeSortOption={filters.sortBy}
+                          filters={filters}
+                          products={categoryProducts.data.products}
+                          onAttributeFiltersChange={onFiltersChange}
+                          onLoadMore={handleLoadMore}
+                          activeFilters={
+                            filters!.attributes
+                              ? Object.keys(filters!.attributes).length
+                              : 0
+                          }
+                          onOrder={value => {
+                            setSort(value.value);
+                          }}
+                        />
+                      </MetaWrapper>
+                    );
+                  }
+
+                  return null;
+                }}
+              </TypedCategoryProductsQuery>
+            );
           }}
-        </TypedCategoryProductsQuery>
+        </TypedCategoryProductsDataQuery>
       )}
     </NetworkStatus>
   );

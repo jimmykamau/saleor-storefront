@@ -3,10 +3,31 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: Attributes
+// GraphQL query operation: Collection
 // ====================================================
 
-export interface Attributes_attributes_edges_node_values {
+export interface Collection_collection_backgroundImage {
+  __typename: "Image";
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface Collection_collection {
+  __typename: "Collection";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  slug: string;
+  name: string;
+  seoDescription: string | null;
+  seoTitle: string | null;
+  backgroundImage: Collection_collection_backgroundImage | null;
+}
+
+export interface Collection_attributes_edges_node_values {
   __typename: "AttributeValue";
   /**
    * The ID of the object.
@@ -22,7 +43,7 @@ export interface Attributes_attributes_edges_node_values {
   slug: string | null;
 }
 
-export interface Attributes_attributes_edges_node {
+export interface Collection_attributes_edges_node {
   __typename: "Attribute";
   /**
    * The ID of the object.
@@ -39,29 +60,33 @@ export interface Attributes_attributes_edges_node {
   /**
    * List of attribute's values.
    */
-  values: (Attributes_attributes_edges_node_values | null)[] | null;
+  values: (Collection_attributes_edges_node_values | null)[] | null;
 }
 
-export interface Attributes_attributes_edges {
+export interface Collection_attributes_edges {
   __typename: "AttributeCountableEdge";
   /**
    * The item at the end of the edge.
    */
-  node: Attributes_attributes_edges_node;
+  node: Collection_attributes_edges_node;
 }
 
-export interface Attributes_attributes {
+export interface Collection_attributes {
   __typename: "AttributeCountableConnection";
-  edges: Attributes_attributes_edges[];
+  edges: Collection_attributes_edges[];
 }
 
-export interface Attributes {
+export interface Collection {
+  /**
+   * Look up a collection by ID.
+   */
+  collection: Collection_collection | null;
   /**
    * List of the shop's attributes.
    */
-  attributes: Attributes_attributes | null;
+  attributes: Collection_attributes | null;
 }
 
-export interface AttributesVariables {
+export interface CollectionVariables {
   id: string;
 }

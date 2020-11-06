@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { IAddress, ICardData, IFormError, IPaymentGateway } from "@types";
+=======
+import { ICardData, IFormError, IPaymentGateway } from "@types";
+import { CompleteCheckout_checkoutComplete_order } from "@saleor/sdk/lib/mutations/gqlTypes/CompleteCheckout";
+>>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 
 export interface IProps {
   /**
@@ -34,11 +39,19 @@ export interface IProps {
    */
   processPayment: (
     gateway: string,
-    token: string,
+    token?: string,
     cardData?: ICardData
   ) => void;
 
   billingAddress?: IAddress | null | undefined;
+
+  submitPayment: (data: {
+    confirmationData: any;
+    confirmationNeeded: boolean;
+  }) => Promise<any>;
+  submitPaymentSuccess: (
+    order?: CompleteCheckout_checkoutComplete_order
+  ) => void;
   /**
    * Method called when gateway error occured.
    */

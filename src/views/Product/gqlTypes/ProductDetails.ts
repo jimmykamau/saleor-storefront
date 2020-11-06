@@ -469,6 +469,7 @@ export interface ProductDetails_product_images {
    * The ID of the object.
    */
   id: string;
+  alt: string;
   /**
    * The URL of the image.
    */
@@ -622,6 +623,10 @@ export interface ProductDetails_product_variants_attributes_attribute {
    * Name of an attribute displayed in the interface.
    */
   name: string | null;
+  /**
+   * Internal representation of an attribute name.
+   */
+  slug: string | null;
 }
 
 export interface ProductDetails_product_variants_attributes_values {
@@ -721,6 +726,11 @@ export interface ProductDetails_product {
    * Whether the product is in stock and visible or not.
    */
   isAvailable: boolean | null;
+  /**
+   * Whether the product is available for purchase.
+   */
+  isAvailableForPurchase: boolean | null;
+  availableForPurchase: any | null;
 }
 
 export interface ProductDetails {
