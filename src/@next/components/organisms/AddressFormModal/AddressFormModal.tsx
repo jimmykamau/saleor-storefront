@@ -6,7 +6,6 @@ import { CountryCode } from "@saleor/sdk/lib/gqlTypes/globalTypes";
 import { AddressForm } from "../AddressForm";
 import { Modal } from "../Modal";
 
-import { CountryCode } from "@sdk/gqlTypes/globalTypes";
 import { IProps } from "./types";
 
 export const AddressFormModal: React.FC<IProps> = ({
