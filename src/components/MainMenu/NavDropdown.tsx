@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
+
 import classNames from "classnames";
 import * as React from "react";
 
@@ -5,10 +7,10 @@ import {
   NavLink,
   OverlayContextInterface,
   OverlayTheme,
-  OverlayType
+  OverlayType,
 } from "..";
+import { MainMenu_shop_navigation_main_items } from "./gqlTypes/MainMenu";
 import NavItem from "./NavItem";
-import { MainMenu_shop_navigation_main_items } from "./types/MainMenu";
 
 import "./scss/index.scss";
 

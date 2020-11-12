@@ -11,7 +11,12 @@ const getBtnAction = (btn: IButtonProps) =>
 
 const renderCancelBtn = (cancelBtn?: IButtonProps) =>
   cancelBtn && (
-    <ButtonLink {...getBtnAction(cancelBtn)} type="button" color="secondary">
+    <ButtonLink
+      {...getBtnAction(cancelBtn)}
+      testingContext="cancelButton"
+      type="button"
+      color="secondary"
+    >
       {cancelBtn.text}
     </ButtonLink>
   );
@@ -23,6 +28,7 @@ const renderSubmitBtn = (
 ) =>
   submitBtn && (
     <Button
+      testingContext={submitBtn.testingContext}
       {...getBtnAction(submitBtn)}
       type={formId ? "submit" : "button"}
       form={formId}

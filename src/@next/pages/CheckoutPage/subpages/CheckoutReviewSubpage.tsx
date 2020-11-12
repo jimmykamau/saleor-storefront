@@ -4,30 +4,43 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { RouteComponentProps, useHistory } from "react-router";
+import { RouteComponentProps } from "react-router";
 
 import { CheckoutReview } from "@components/organisms";
 import { statuses as dummyStatuses } from "@components/organisms/DummyPaymentGateway";
-import { useCheckout } from "@sdk/react";
-import { CHECKOUT_STEPS } from "@temp/core/config";
+import { useCheckout } from "@saleor/sdk";
 import { IFormError } from "@types";
+
+export interface ISubmitCheckoutData {
+  id: string;
+  orderNumber: string;
+  token: string;
+}
 
 export interface ICheckoutReviewSubpageHandles {
   complete: () => void;
 }
+
 interface IProps extends RouteComponentProps<any> {
   selectedPaymentGatewayToken?: string;
+  paymentGatewayFormRef: React.RefObject<HTMLFormElement>;
   changeSubmitProgress: (submitInProgress: boolean) => void;
+  onSubmitSuccess: (data: ISubmitCheckoutData) => void;
 }
 
 const CheckoutReviewSubpageWithRef: RefForwardingComponent<
   ICheckoutReviewSubpageHandles,
   IProps
 > = (
-  { selectedPaymentGatewayToken, changeSubmitProgress, ...props }: IProps,
+  {
+    selectedPaymentGatewayToken,
+    paymentGatewayFormRef,
+    changeSubmitProgress,
+    onSubmitSuccess,
+    ...props
+  }: IProps,
   ref
 ) => {
-  const history = useHistory();
   const { checkout, payment, completeCheckout } = useCheckout();
 
   const [errors, setErrors] = useState<IFormError[]>([]);
@@ -53,7 +66,11 @@ const CheckoutReviewSubpageWithRef: RefForwardingComponent<
           status => status.token === selectedPaymentGatewayToken
         )?.label
       }`;
-    } else if (payment?.creditCard) {
+    }
+    if (payment?.gateway === "mirumee.payments.adyen") {
+      return `Adyen payments`;
+    }
+    if (payment?.creditCard) {
       return `Ending in ${payment?.creditCard.lastDigits}`;
     } else if (payment?.gateway === "olduka.payments.mpesa") {
       return `Lipa na M-PESA: ${payment?.token}`
@@ -64,21 +81,28 @@ const CheckoutReviewSubpageWithRef: RefForwardingComponent<
   useImperativeHandle(ref, () => ({
     complete: async () => {
       changeSubmitProgress(true);
-      const { data, dataError } = await completeCheckout();
-      changeSubmitProgress(false);
-      const errors = dataError?.error;
-      if (errors) {
-        setErrors(errors);
+      let data;
+      let dataError;
+      if (payment?.gateway === "mirumee.payments.adyen") {
+        paymentGatewayFormRef.current?.dispatchEvent(
+          new Event("submitComplete", { cancelable: true })
+        );
       } else {
-        setErrors([]);
-        history.push({
-          pathname: CHECKOUT_STEPS[3].nextStepLink,
-          state: {
-            id: data?.id,
-            orderNumber: data?.number,
-            token: data?.token,
-          },
-        });
+        const response = await completeCheckout();
+        data = response.data;
+        dataError = response.dataError;
+        changeSubmitProgress(false);
+        const errors = dataError?.error;
+        if (errors) {
+          setErrors(errors);
+        } else {
+          setErrors([]);
+          onSubmitSuccess({
+            id: data?.order?.id,
+            orderNumber: data?.order?.number,
+            token: data?.order?.token,
+          });
+        }
       }
     },
   }));

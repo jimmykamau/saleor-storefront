@@ -5,7 +5,7 @@ import { productPricingFragment } from "../Product/queries";
 import {
   SearchProducts,
   SearchProductsVariables,
-} from "./types/SearchProducts";
+} from "./gqlTypes/SearchProducts";
 
 export const searchProductsQuery = gql`
   ${productPricingFragment}
@@ -46,7 +46,7 @@ export const searchProductsQuery = gql`
         hasNextPage
       }
     }
-    attributes(first: 100) {
+    attributes(filter: { filterableInStorefront: true }, first: 100) {
       edges {
         node {
           id

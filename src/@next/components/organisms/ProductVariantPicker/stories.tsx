@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react";
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-import { ProductVariantPicker } from ".";
+import ProductVariantPicker from "./ProductVariantPicker";
 import { productVariants } from "./fixtures";
 
 let portalRoot = document.getElementById("portal-root");
@@ -23,8 +23,10 @@ const withContainer = (children: ReactNode) => (
 
 const PRODUCT_VARIANTS = productVariants;
 const PROPS = {
+  onAttributeChangeHandler: action("attribute change"),
   onChange: action("onChange"),
   productVariants: PRODUCT_VARIANTS,
+  queryAttributes: {},
 };
 
 storiesOf("@components/organisms/ProductVariantPicker", module)
@@ -33,7 +35,7 @@ storiesOf("@components/organisms/ProductVariantPicker", module)
   .add("with sidebar", () =>
     withContainer(
       <ProductVariantPicker
-        selectSidebar={true}
+        selectSidebar
         selectSidebarTarget={portalRoot}
         {...PROPS}
       />

@@ -1,7 +1,9 @@
 import "./scss/index.scss";
 
 import * as React from "react";
+import { useIntl } from "react-intl";
 
+import { commonMessages } from "@temp/intl";
 import { IFilterAttributes, IFilters } from "@types";
 import { DebounceChange, ProductsFeatured, TextField } from "../../components";
 
@@ -11,7 +13,7 @@ import { FilterSidebar } from "../../@next/components/organisms/FilterSidebar";
 
 import { maybe } from "../../core/utils";
 
-import { SearchProducts_products } from "./types/SearchProducts";
+import { SearchProducts_products } from "./gqlTypes/SearchProducts";
 
 interface SortItem {
   label: string;
@@ -61,6 +63,7 @@ const Page: React.FC<PageProps> = ({
   );
   const hasProducts = canDisplayProducts && !!products.totalCount;
   const [showFilters, setShowFilters] = React.useState(false);
+  const intl = useIntl();
 
   const getAttribute = (attributeSlug: string, valueSlug: string) => {
     return {
@@ -99,7 +102,9 @@ const Page: React.FC<PageProps> = ({
                 return (
                   <TextField
                     autoFocus
-                    label="Search term:"
+                    label={intl.formatMessage({
+                      defaultMessage: "Search term:",
+                    })}
                     onChange={change}
                     value={value}
                   />
@@ -138,7 +143,11 @@ const Page: React.FC<PageProps> = ({
         )}
       </div>
 
-      {!hasProducts && <ProductsFeatured title="You might like" />}
+      {!hasProducts && (
+        <ProductsFeatured
+          title={intl.formatMessage(commonMessages.youMightLike)}
+        />
+      )}
     </div>
   );
 };

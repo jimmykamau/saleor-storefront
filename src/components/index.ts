@@ -13,9 +13,8 @@ export { default as NotFound } from "./NotFound";
 export { default as Offline } from "./Offline";
 export { default as OfflinePlaceholder } from "./OfflinePlaceholder";
 export { default as Online } from "./Online";
-export { default as PasswordResetForm } from "./PasswordResetForm";
+export { default as PasswordResetRequestForm } from "./PasswordResetRequestForm";
 export { default as PriceRangeFilter } from "./PriceRangeFilter";
-export { default as ProductDescription } from "./ProductDescription";
 export { default as ProductListItem } from "./ProductListItem";
 export { default as SelectField } from "./SelectField";
 export { default as SocialMediaIcon } from "./SocialMediaIcon";
@@ -52,6 +51,5 @@ export {
   ShowOverlayType,
 } from "./Overlay";
 export { default as Select } from "./Select";
-export { default as Modal } from "./Modal";
 export { default as Error } from "./Error";
 export { default as NotificationTemplate } from "./NotificationTemplate";
