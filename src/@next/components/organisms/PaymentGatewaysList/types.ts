@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import { IAddress, ICardData, IFormError, IPaymentGateway } from "@types";
-=======
-import { ICardData, IFormError, IPaymentGateway } from "@types";
 import { CompleteCheckout_checkoutComplete_order } from "@saleor/sdk/lib/mutations/gqlTypes/CompleteCheckout";
->>>>>>> 3ba4ffa8a14f90398462b84e5da088baeb84dfc6
 
 export interface IProps {
   /**
